@@ -1,4 +1,4 @@
-import os
+import os, time, datetime
 
 print("Bienvenido a la simulación de procesamiento por lotes")
 
@@ -20,7 +20,7 @@ listaProcesos = []
 procesosPendientes = []
 enProceso = []
 procesosTerminados = []
-
+"""
 while True:
     print("Procesos capturados: ", len(listaProcesos))
     print("\n")
@@ -97,22 +97,30 @@ while True:
     #print("Proceso: ", proceso)
 
 # print("Proceso1: ", Proceso1)
-
-"""proceso1 = Proceso("Jose", "5+1", 5, "1", "6")
+"""
+proceso1 = Proceso("Jose", "5+1", 5, "1", "6")
 proceso2 = Proceso("Juan", "3+7", 5, "2", "10")
 proceso3 = Proceso("Gabriel", "1+1", 5, "3", "2")
 proceso4 = Proceso("Maria", "6+2", 5, "4", "8")
 proceso5 = Proceso("Karla", "7+4", 5, "5", "11")
-proceso6 = Proceso("Mauricio", "9+3", 5, "6", "12")
+proceso6 = Proceso("Laura", "9+3", 5, "6", "12")
 
 listaProcesos.append(proceso1)
 listaProcesos.append(proceso2)
 listaProcesos.append(proceso3)
 listaProcesos.append(proceso4)
 listaProcesos.append(proceso5)
-listaProcesos.append(proceso6)"""
+listaProcesos.append(proceso6)
 
-os.system("clear")
+tiempoTotal = 0
+#Obtener los segundos totales de los TME
+for proceso in listaProcesos:
+    tiempoTotal += proceso.TME
+#print("Tiempo Total: ", tiempoTotal)
+
+
+
+os.system("cls")
 while(len(listaProcesos) > 0):
     while(len(procesosPendientes) < 4):
         procesosPendientes.append(listaProcesos.pop(0))
@@ -123,9 +131,10 @@ while(len(listaProcesos) > 0):
     input("Press Enter to continue...")
     for i in range(len(procesosPendientes)):
         print("Procesos en lote actual: \n")
-        print("Nombre\t\tTME\n")     
+        print("Nombre\t\t\tTME")     
         for proceso in procesosPendientes:
-            print(proceso.nombreP,"\t\t",proceso.TME)
+            print(proceso.nombreP,"\t\t\t",proceso.TME)
+
         print("------------------------------")
         enProceso.append(procesosPendientes.pop(0))
         print("Proceso realizandose: \n")
@@ -144,5 +153,5 @@ while(len(listaProcesos) > 0):
         for proceso in procesosTerminados:
             print(proceso.id, "\t  ", proceso.operacion, "\t\t", proceso.resultado)
         input("Press Enter to continue...")
-        os.system("clear")
+        os.system("cls")
 
