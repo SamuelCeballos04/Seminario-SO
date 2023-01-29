@@ -1,4 +1,4 @@
-import os, time, datetime
+import os, time, datetime, math
 
 print("Bienvenido a la simulación de procesamiento por lotes")
 
@@ -104,9 +104,9 @@ while True:
 proceso1 = Proceso("Jose", "5+1", 5, "1", "6", 0)
 proceso2 = Proceso("Juan", "3+7", 5, "2", "10", 0)
 proceso3 = Proceso("Gabriel", "1+1", 5, "3", "2", 0)
-proceso4 = Proceso("Maria", "6+2", 5, "4", "8", 0)
+proceso4 = Proceso("Maria", "6+2", 7, "4", "8", 0)
 proceso5 = Proceso("Karla", "7+4", 5, "5", "11", 0)
-proceso6 = Proceso("Laura", "9+3", 5, "6", "12", 0)
+proceso6 = Proceso("Laura", "9+3", 6, "6", "12", 0)
 
 listaProcesos.append(proceso1)
 listaProcesos.append(proceso2)
@@ -114,11 +114,17 @@ listaProcesos.append(proceso3)
 listaProcesos.append(proceso4)
 listaProcesos.append(proceso5)
 listaProcesos.append(proceso6)
+listaProcesos.append(proceso1)
+#listaProcesos.append(proceso2)
+#listaProcesos.append(proceso3)
+#listaProcesos.append(proceso4)
+listaProcesos.append(proceso5)
+listaProcesos.append(proceso6)
 
 tiempoTotal = 0
 NoLote = 1 
 
-os.system("clear")
+os.system("cls")
 while(len(listaProcesos) > 0):
     while(len(procesosPendientes) < 4):
         procesosPendientes.append(listaProcesos.pop(0))
@@ -156,6 +162,9 @@ while(len(listaProcesos) > 0):
             print("{:<12} {:<15} {:<16} {:<7}".format(proceso.lote ,proceso.id, proceso.operacion, proceso.resultado))
             #print(proceso.id, "\t  ", proceso.operacion, "\t\t", proceso.resultado)
         print("\n")
+        lotes = len(listaProcesos) / 4
+        lotes = math.ceil(lotes)
+        print("Número de lotes restantes: ", lotes)
         while total_seconds > 0:
             timer = datetime.timedelta(seconds = total_seconds)
             crono = datetime.timedelta(seconds = i)
@@ -171,5 +180,5 @@ while(len(listaProcesos) > 0):
         if(len(procesosTerminados) % 4 == 0):
                 NoLote += 1
         
-        os.system("clear")
+        os.system("cls")
 
