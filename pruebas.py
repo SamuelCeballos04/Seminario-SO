@@ -93,7 +93,7 @@ while True:
     while (reCapturar != 2 and reCapturar != 1):
         print("Opción incorrecta")
         reCapturar = int(input("¿Deseas ingresar otro proceso? \n1.Sí \n2. No \nElige: "))
-    os.system('clear')
+    os.system('cls')
     # print("Proceso1: ", Proceso1)
 
 #for proceso in listaProcesos:
@@ -101,6 +101,7 @@ while True:
 
 # print("Proceso1: ", Proceso1)
 """
+
 proceso1 = Proceso("Jose", "5+1", 5, "1", "6", 0)
 proceso2 = Proceso("Juan", "3+7", 5, "2", "10", 0)
 proceso3 = Proceso("Gabriel", "1+1", 5, "3", "2", 0)
@@ -114,13 +115,8 @@ listaProcesos.append(proceso3)
 listaProcesos.append(proceso4)
 listaProcesos.append(proceso5)
 listaProcesos.append(proceso6)
-listaProcesos.append(proceso1)
-#listaProcesos.append(proceso2)
-#listaProcesos.append(proceso3)
-#listaProcesos.append(proceso4)
-listaProcesos.append(proceso5)
-listaProcesos.append(proceso6)
 
+cont = len(listaProcesos)
 tiempoTotal = 0
 NoLote = 1 
 
@@ -179,6 +175,7 @@ while(len(listaProcesos) > 0):
         procesosTerminados.append(enProceso.pop(0))
         if(len(procesosTerminados) % 4 == 0):
                 NoLote += 1
-        
-        os.system("cls")
+        if cont > 1:
+            os.system("cls")
+        cont-=1
 
