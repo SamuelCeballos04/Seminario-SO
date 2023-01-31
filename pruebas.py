@@ -102,12 +102,16 @@ while True:
 # print("Proceso1: ", Proceso1)
 """
 
-proceso1 = Proceso("Jose", "5+1", 5, "1", "6", 1)
-proceso2 = Proceso("Juan", "3+7", 5, "2", "10", 1)
-proceso3 = Proceso("Gabriel", "1+1", 5, "3", "2", 1)
-proceso4 = Proceso("Maria", "6+2", 7, "4", "8", 1)
-proceso5 = Proceso("Karla", "7+4", 5, "5", "11", 1)
-proceso6 = Proceso("Laura", "9+3", 6, "6", "12", 1)
+proceso1 = Proceso("Jose", "5+1", 2, "1", "6", 1)
+proceso2 = Proceso("Juan", "3+7", 2, "2", "10", 1)
+proceso3 = Proceso("Gabriel", "1+1", 2, "3", "2", 1)
+proceso4 = Proceso("Maria", "6+2", 2, "4", "8", 1)
+proceso5 = Proceso("Karla", "7+4", 2, "5", "11", 1)
+proceso6 = Proceso("Laura", "9+3", 2, "6", "12", 1)
+proceso7 = Proceso("Marco", "9+5", 2, "7", "14", 1)
+proceso8 = Proceso("Adrián", "5-2", 2, "8", "3", 1)
+proceso9 = Proceso("Moisés", "5*2", 2, "9", "10", 1)
+
 
 listaProcesos.append(proceso1)
 listaProcesos.append(proceso2)
@@ -115,12 +119,15 @@ listaProcesos.append(proceso3)
 listaProcesos.append(proceso4)
 listaProcesos.append(proceso5)
 listaProcesos.append(proceso6)
+listaProcesos.append(proceso7)
+listaProcesos.append(proceso8)
+listaProcesos.append(proceso9)
 
 cont = len(listaProcesos)
 tiempoTotal = 0
 NoLote = 1 
 
-os.system("clear")
+os.system("cls")
 while(len(listaProcesos) > 0):
     while(len(procesosPendientes) < 4):
         procesosPendientes.append(listaProcesos.pop(0))
@@ -135,10 +142,10 @@ while(len(listaProcesos) > 0):
         enProceso.append(procesosPendientes.pop(0))   
         for proceso in procesosPendientes:
             print("{:<16} {:<25}".format(proceso.nombreP, proceso.TME))
-            proceso.lote = NoLote
 
         print("------------------------------------------------")
         #enProceso.append(procesosPendientes.pop(0))
+        enProceso[0].lote = NoLote
         print("Proceso realizandose: \n")
         total_seconds = enProceso[0].TME
         i=0
@@ -174,9 +181,23 @@ while(len(listaProcesos) > 0):
             #os.system("cls")
         #input("Press Enter to continue...")
         procesosTerminados.append(enProceso.pop(0))
-        if(len(procesosPendientes) == 0):
-                NoLote += 1
+        if len(listaProcesos) == 0:
+            os.system("cls")
+            print("Procesos en lote actual: \n")
+            print ("{:<15} {:<25}".format('Nombre','TME'))
+            print("------------------------------------------------")
+            print("Proceso realizandose: \n")
+            print("{:<12} {:<15} {:<8} {:<8}".format('Nombre','Operacion', 'TME', 'ID'))
+            print("------------------------------------------------")
+            print("Procesos Terminados: \n")
+            print("{:<12} {:<12} {:<15} {:<8}".format('Lote' ,'ID','Operacion', 'Resultado'))
+            print()
+            for proceso in procesosTerminados:
+                print("{:<12} {:<15} {:<16} {:<7}".format(proceso.lote ,proceso.id, proceso.operacion, proceso.resultado))
+        print("\n")
+        if(len(procesosTerminados) % 4 == 0):
+            NoLote += 1
         if cont > 1:
-            os.system("clear")
+            os.system("cls")
         cont-=1
 
