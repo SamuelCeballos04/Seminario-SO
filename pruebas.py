@@ -102,12 +102,12 @@ while True:
 # print("Proceso1: ", Proceso1)
 """
 
-proceso1 = Proceso("Jose", "5+1", 5, "1", "6", 0)
-proceso2 = Proceso("Juan", "3+7", 5, "2", "10", 0)
-proceso3 = Proceso("Gabriel", "1+1", 5, "3", "2", 0)
-proceso4 = Proceso("Maria", "6+2", 7, "4", "8", 0)
-proceso5 = Proceso("Karla", "7+4", 5, "5", "11", 0)
-proceso6 = Proceso("Laura", "9+3", 6, "6", "12", 0)
+proceso1 = Proceso("Jose", "5+1", 5, "1", "6", 1)
+proceso2 = Proceso("Juan", "3+7", 5, "2", "10", 1)
+proceso3 = Proceso("Gabriel", "1+1", 5, "3", "2", 1)
+proceso4 = Proceso("Maria", "6+2", 7, "4", "8", 1)
+proceso5 = Proceso("Karla", "7+4", 5, "5", "11", 1)
+proceso6 = Proceso("Laura", "9+3", 6, "6", "12", 1)
 
 listaProcesos.append(proceso1)
 listaProcesos.append(proceso2)
@@ -120,7 +120,7 @@ cont = len(listaProcesos)
 tiempoTotal = 0
 NoLote = 1 
 
-os.system("cls")
+os.system("clear")
 while(len(listaProcesos) > 0):
     while(len(procesosPendientes) < 4):
         procesosPendientes.append(listaProcesos.pop(0))
@@ -131,13 +131,14 @@ while(len(listaProcesos) > 0):
     for i in range(len(procesosPendientes)):
         print("Procesos en lote actual: \n")
         print ("{:<15} {:<25}".format('Nombre','TME'))  
-        print()   
+        print()
+        enProceso.append(procesosPendientes.pop(0))   
         for proceso in procesosPendientes:
             print("{:<16} {:<25}".format(proceso.nombreP, proceso.TME))
             proceso.lote = NoLote
 
         print("------------------------------------------------")
-        enProceso.append(procesosPendientes.pop(0))
+        #enProceso.append(procesosPendientes.pop(0))
         print("Proceso realizandose: \n")
         total_seconds = enProceso[0].TME
         i=0
@@ -173,9 +174,9 @@ while(len(listaProcesos) > 0):
             #os.system("cls")
         #input("Press Enter to continue...")
         procesosTerminados.append(enProceso.pop(0))
-        if(len(procesosTerminados) % 4 == 0):
+        if(len(procesosPendientes) == 0):
                 NoLote += 1
         if cont > 1:
-            os.system("cls")
+            os.system("clear")
         cont-=1
 
