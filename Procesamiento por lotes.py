@@ -102,15 +102,15 @@ while True:
 # print("Proceso1: ", Proceso1)
 """
 
-proceso1 = Proceso("Jose", "5+1", 2, "1", "6", 1)
-proceso2 = Proceso("Juan", "3+7", 2, "2", "10", 1)
-proceso3 = Proceso("Gabriel", "1+1", 2, "3", "2", 1)
-proceso4 = Proceso("Maria", "6+2", 2, "4", "8", 1)
-proceso5 = Proceso("Karla", "7+4", 2, "5", "11", 1)
-proceso6 = Proceso("Laura", "9+3", 2, "6", "12", 1)
-proceso7 = Proceso("Marco", "9+5", 2, "7", "14", 1)
-proceso8 = Proceso("Adrián", "5-2", 2, "8", "3", 1)
-proceso9 = Proceso("Moisés", "5*2", 2, "9", "10", 1)
+proceso1 = Proceso("aaaa", "15 + 12", 6, "1", "27", 0)
+proceso2 = Proceso("bbbb", "100 - 52", 6, "2", "48", 0)
+proceso3 = Proceso("cccc", "12 * 10", 6, "3", "120", 0)
+proceso4 = Proceso("dddd", "15 / 5", 6, "4", "3.0", 0)
+proceso5 = Proceso("eeee", "169 % 13", 6, "5", "0", 0)
+proceso6 = Proceso("ffff", "56 + 74", 6, "6", "130", 0)
+proceso7 = Proceso("gggg", "98 - 12", 6, "7", "86", 0)
+proceso8 = Proceso("hhhhh", "56 * 87", 6, "8", "4872", 0)
+proceso9 = Proceso("iiii", "36 / 4", 6, "9", "9.0", 0)
 
 
 listaProcesos.append(proceso1)
