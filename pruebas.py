@@ -1,19 +1,70 @@
-import os, time, datetime, math
+import os, time, datetime, math, random
+from pynput import keyboard 
 
 print("Bienvenido a la simulación de procesamiento por lotes")
 
 
 class Proceso:
-    def __init__(self, nombreP, operacion, TME, id, resultado, lote):
-        self.nombreP = nombreP
+    def __init__(self, operacion, TME, TT, id, resultado, lote):
         self.operacion = operacion
         self.TME = TME
+        self.TT = TT
         self.id = id
         self.resultado = resultado
         self.lote = lote
 
     def __repr__(self):
-        return f"Nombre del programador: {self.nombreP}, Operacion: {self.operacion}, TME: {self.TME}, ID: {self.id}"
+        return f"Operacion: {self.operacion}, TME: {self.TME}, ID: {self.id}, Resultado: {self.resultado}"
+
+def on_press(key):
+    if hasattr(key, 'char'):
+        if key.char == "i":
+            global flag_1
+            enProceso[0].TT = tt
+            enProceso[0].TME = total_seconds
+            procesosPendientes.append(enProceso.pop(0))
+            enProceso.append(procesosPendientes.pop(0))
+            flag_1 = 1
+        elif key.char == "e":
+            global flag_2
+            enProceso[0].resultado = "ERROR"
+            procesosTerminados.append(enProceso.pop(0))
+            enProceso.append(procesosPendientes.pop(0))
+            flag_2 = 1
+        elif key.char == "p":
+            global pausa
+            pausa = True
+        elif key.char == "c":
+            pausa = False
+
+def mostrar():
+    print("------------------------------------------------")
+    
+    print("Procesos en lote actual: \n")
+    print ("{:<15} {:<15} {:<15}".format('ID', 'TME', 'TT'))  
+    print()
+    for proceso in procesosPendientes:
+        print("{:<16} {:<15} {:<16}".format(proceso.id, proceso.TME, proceso.TT))
+
+    print("------------------------------------------------")
+    print("Proceso realizandose: \n")
+    print("{:<12} {:<15} {:<8} {:<8}".format('Operacion', 'TME', 'TT', 'ID'))
+    print()
+    for proceso in enProceso:
+        print("{:<13} {:<15} {:<7} {:<7}".format(proceso.operacion, total_seconds, tt, proceso.id))
+    print()
+    print("------------------------------------------------")
+    print("Procesos Terminados: \n")
+    print("{:<12} {:<14} {:<15} {:<8}".format('Lote' ,'ID','Operacion', 'Resultado'))
+    print()
+    for proceso in procesosTerminados:
+        print("{:<12} {:<15} {:<16} {:<7}".format(proceso.lote ,proceso.id, proceso.operacion, proceso.resultado))
+    print("\n")
+    print("Número de lotes restantes: ", lotes)
+
+
+l = keyboard.Listener(on_press=on_press)
+l.start()
 
 
 listaID = []
@@ -21,183 +72,89 @@ listaProcesos = []
 procesosPendientes = []
 enProceso = []
 procesosTerminados = []
-"""
-while True:
-    print("Procesos capturados: ", len(listaProcesos))
-    print("\n")
-    nombreP = input("Nombre del programador: ")
 
-    opcion = int(
-        input("Operación a realizar: \n1. Suma \n2. Resta \n3. Multiplicación \n4. División \n5. Residuo \nElige: "))
-    while (not (opcion >= 1 and opcion <= 5)):
-        print("Opción no válida")
-        opcion = int(input(
-            "Operación a realizar: \n1. Suma \n2. Resta \n3. Multiplicación \n4. División \n5. Residuo \nElige: "))
-    if (opcion == 1):
-        primer = (input("Primer operando: "))
-        segundo = (input("Segundo operando: "))
-        operacion = primer + " + " + segundo
-        primer = int(primer)
-        segundo = int(segundo)
-        resultado = primer + segundo
-    elif (opcion == 2):
-        primer = (input("Primer operando: "))
-        segundo = (input("Segundo operando: "))
-        operacion = primer + " - " + segundo
-        primer = int(primer)
-        segundo = int(segundo)
-        resultado = primer - segundo
-    elif (opcion == 3):
-        primer = (input("Primer operando: "))
-        segundo = (input("Segundo operando: "))
-        operacion = primer + " * " + segundo
-        primer = int(primer)
-        segundo = int(segundo)
-        resultado = primer * segundo
-    elif (opcion == 4):
-        primer = int(input("Primer operando: "))
-        segundo = int(input("Segundo operando: "))
-        while (segundo <= 0):
-            print("Segundo operando no válido, ingrese un valor mayor a 0")
-            segundo = int(input("Segundo operando: "))
-        resultado = primer / segundo
-        primer = str(primer)
-        segundo = str(segundo)
-        operacion = primer + " / " + segundo
-    elif (opcion == 5):
-        primer = int(input("Primer operando: "))
-        segundo = int(input("Segundo operando: "))
-        while (segundo <= 0):
-            print("Segundo operando no válido, ingrese un valor mayor a 0")
-            segundo = int(input("Segundo operando: "))
-        resultado = primer % segundo
-        primer = str(primer)
-        segundo = str(segundo)
-        operacion = primer + " % " + segundo
-
-    TME = int(input("Tiempo máximo estimado: "))
-    while (TME <= 0):
-        TME = int(input("Tiempo maximo estimado no valido, ingrese un valor diferente: "))
-
-    id = input(("Identificador de operacion: "))
-    while id in listaID:
-        print("El ID ya existe")
-        id = input(("Identificador de operacion: "))
-    listaID.append(id)
-    ProcesoCap = Proceso(nombreP, operacion, TME, id, resultado, 0)
-    listaProcesos.append(ProcesoCap)
-    ###
-    reCapturar = int(input("¿Deseas ingresar otro proceso? \n1.Sí \n2. No \nElige: "))
-    if (reCapturar == 2):
-        break
-    while (reCapturar != 2 and reCapturar != 1):
-        print("Opción incorrecta")
-        reCapturar = int(input("¿Deseas ingresar otro proceso? \n1.Sí \n2. No \nElige: "))
-    os.system('cls')
-    # print("Proceso1: ", Proceso1)
-
-#for proceso in listaProcesos:
-    #print("Proceso: ", proceso)
-
-# print("Proceso1: ", Proceso1)
-"""
-
-proceso1 = Proceso("Jose", "5+1", 2, "1", "6", 1)
-proceso2 = Proceso("Juan", "3+7", 2, "2", "10", 1)
-proceso3 = Proceso("Gabriel", "1+1", 2, "3", "2", 1)
-proceso4 = Proceso("Maria", "6+2", 2, "4", "8", 1)
-proceso5 = Proceso("Karla", "7+4", 2, "5", "11", 1)
-proceso6 = Proceso("Laura", "9+3", 2, "6", "12", 1)
-proceso7 = Proceso("Marco", "9+5", 2, "7", "14", 1)
-proceso8 = Proceso("Adrián", "5-2", 2, "8", "3", 1)
-proceso9 = Proceso("Moisés", "5*2", 2, "9", "10", 1)
+procesos = int(input("Ingrese el numero de procesos a trabajar: "))
+indiceProceso = 0
+tt = 0
+operaciones = ["+", "-", "*", "/", "%"]
+os.system("clear")
 
 
-listaProcesos.append(proceso1)
-listaProcesos.append(proceso2)
-listaProcesos.append(proceso3)
-listaProcesos.append(proceso4)
-listaProcesos.append(proceso5)
-listaProcesos.append(proceso6)
-listaProcesos.append(proceso7)
-listaProcesos.append(proceso8)
-listaProcesos.append(proceso9)
+while(procesos > 0):
+    indiceProceso += 1
+    tme = random.randint(5, 16)
+    num1 = random.randint(1, 50)
+    num2 = random.randint(1, 50)
+    operador = random.choice(operaciones)
+    operacion = str(num1) + " " + operador + " " + str(num2)
+
+    if(operador == "+"):
+        res = num1 + num2
+    elif(operador == "-"):
+        res = num1 - num2
+    elif(operador == "*"):
+        res = num1 * num2
+    elif(operador == "/"):
+        res = num1 / num2
+    elif(operador == "%"):
+        res = num1 % num2
+
+    procesoCap = Proceso(operacion, tme, tt, indiceProceso, res, 0)
+    listaProcesos.append(procesoCap)
+    procesos -= 1
+
 
 cont = len(listaProcesos)
 tiempoTotal = 0
 NoLote = 1 
+pausa = False
+flag_1 = 0
+flag_2 = 0
 
-os.system("cls")
 while(len(listaProcesos) > 0):
     while(len(procesosPendientes) < 4):
         procesosPendientes.append(listaProcesos.pop(0))
         if(len(listaProcesos) == 0):
             break
-    print("------------------------------------------------")
-    #input("Press Enter to continue...")
     for i in range(len(procesosPendientes)):
-        print("Procesos en lote actual: \n")
-        print ("{:<15} {:<25}".format('Nombre','TME'))  
-        print()
-        enProceso.append(procesosPendientes.pop(0))   
-        for proceso in procesosPendientes:
-            print("{:<16} {:<25}".format(proceso.nombreP, proceso.TME))
-
-        print("------------------------------------------------")
-        #enProceso.append(procesosPendientes.pop(0))
-        enProceso[0].lote = NoLote
-        print("Proceso realizandose: \n")
-        total_seconds = enProceso[0].TME
-        i=0
-        print("{:<12} {:<15} {:<8} {:<8}".format('Nombre','Operacion', 'TME', 'ID'))
-        print()
-        print("{:<15} {:<13} {:<7} {:<8}".format(enProceso[0].nombreP,enProceso[0].operacion, enProceso[0].TME, enProceso[0].id))
-        #print("Nombre: \t", enProceso[0].nombreP)
-        #print("Operacion: \t", enProceso[0].operacion)
-        #print("TME: \t\t", enProceso[0].TME)
-        #print("ID: \t\t", enProceso[0].id)
-       #procesosTerminados.append(enProceso.pop(0))
-        print()
-        print("------------------------------------------------")
-        print("Procesos Terminados: \n")
-        print("{:<12} {:<12} {:<15} {:<8}".format('Lote' ,'ID','Operacion', 'Resultado'))
-        print()
-        for proceso in procesosTerminados:
-            print("{:<12} {:<15} {:<16} {:<7}".format(proceso.lote ,proceso.id, proceso.operacion, proceso.resultado))
-            #print(proceso.id, "\t  ", proceso.operacion, "\t\t", proceso.resultado)
-        print("\n")
-        lotes = len(listaProcesos) / 4
-        lotes = math.ceil(lotes)
-        print("Número de lotes restantes: ", lotes)
+        if(len(procesosPendientes) != 0):
+            enProceso.append(procesosPendientes.pop(0))   
+            enProceso[0].lote = NoLote
+            total_seconds = enProceso[0].TME
+            tt = enProceso[0].TT
+            lotes = len(listaProcesos) / 4
+            lotes = math.ceil(lotes)
         while total_seconds > 0:
-            timer = datetime.timedelta(seconds = total_seconds)
-            crono = datetime.timedelta(seconds = i)
+            mostrar()
             total = datetime.timedelta(seconds = tiempoTotal)
-            print("Tiempo restante de proceso: ", timer, "\tTiempo transcurrido de proceso: ", crono, "\tTiempo total transcurrido: ", total, end="\r")
+            print("Tiempo total transcurrido: ", total, end="\r")
             time.sleep(1)
             total_seconds -= 1
-            i+=1
+            tt += 1
             tiempoTotal += 1
-            #os.system("cls")
-        #input("Press Enter to continue...")
-        procesosTerminados.append(enProceso.pop(0))
-        if len(listaProcesos) == 0:
-            os.system("cls")
-            print("Procesos en lote actual: \n")
-            print ("{:<15} {:<25}".format('Nombre','TME'))
-            print("------------------------------------------------")
-            print("Proceso realizandose: \n")
-            print("{:<12} {:<15} {:<8} {:<8}".format('Nombre','Operacion', 'TME', 'ID'))
-            print("------------------------------------------------")
-            print("Procesos Terminados: \n")
-            print("{:<12} {:<12} {:<15} {:<8}".format('Lote' ,'ID','Operacion', 'Resultado'))
-            print()
-            for proceso in procesosTerminados:
-                print("{:<12} {:<15} {:<16} {:<7}".format(proceso.lote ,proceso.id, proceso.operacion, proceso.resultado))
-        print("\n")
+            while pausa:
+                os.system("clear")
+                mostrar()
+                total = datetime.timedelta(seconds = tiempoTotal)
+                print("Tiempo total transcurrido: ", total, end="\r")
+                time.sleep(1)
+                tiempoTotal += 1
+            if(flag_1 == 1):
+                total_seconds = enProceso[0].TME
+                tt = enProceso[0].TT
+                flag_1 = 0
+            if(flag_2 == 1):
+                total_seconds = enProceso[0].TME
+                tt = enProceso[0].TT
+                flag_2 = 0
+            os.system("clear")
+        if(len(enProceso) != 0):    
+            procesosTerminados.append(enProceso.pop(0))
         if(len(procesosTerminados) % 4 == 0):
             NoLote += 1
-        if cont > 1:
-            os.system("cls")
-        cont-=1
+        cont -= 1
+            
+mostrar()
+print("Tiempo total transcurrido: ", total)
+        
 
