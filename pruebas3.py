@@ -27,10 +27,15 @@ def on_press(key):
             flag_1 = 1
         elif key.char == "e":
             global flag_2
+            global error
             enProceso[0].resultado = "ERROR"
-            procesosTerminados.append(enProceso.pop(0))
-            enProceso.append(procesosPendientes.pop(0))
-            flag_2 = 1
+            if(len(procesosPendientes) == 0):
+               procesosTerminados.append(enProceso.pop(0))
+               error = 1
+            else: 
+                procesosTerminados.append(enProceso.pop(0))
+                enProceso.append(procesosPendientes.pop(0))
+                flag_2 = 1
         elif key.char == "p":
             global pausa
             pausa = True
@@ -79,7 +84,7 @@ procesos = int(input("Ingrese el numero de procesos a trabajar: "))
 indiceProceso = 0
 tt = 0
 operaciones = ["+", "-", "*", "/", "%"]
-os.system("cls")
+os.system("clear")
 
 
 while(procesos > 0):
@@ -119,6 +124,7 @@ tiempoTotal = 0
 pausa = False
 flag_1 = 0
 flag_2 = 0
+error = 0
 
 while(len(listaProcesos) > 0):
     while(len(procesosPendientes) < 4):
@@ -141,7 +147,7 @@ while(len(listaProcesos) > 0):
             tt += 1
             tiempoTotal += 1
             while pausa:
-                os.system("cls")
+                os.system("clear")
                 mostrar()
                 total = datetime.timedelta(seconds = tiempoTotal)
                 print("Tiempo total transcurrido: ", total, end="\r")
@@ -155,7 +161,11 @@ while(len(listaProcesos) > 0):
                 total_seconds = enProceso[0].TME
                 tt = enProceso[0].TT
                 flag_2 = 0
-            os.system("cls")
+            if(error == 1):
+                total_seconds = 0
+                tt = 0
+                error = 0
+            os.system("clear")
         if(len(enProceso) != 0):    
             procesosTerminados.append(enProceso.pop(0))
         cont -= 1
