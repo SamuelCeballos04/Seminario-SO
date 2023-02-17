@@ -58,7 +58,8 @@ def mostrar():
     print("{:<12} {:<14} {:<15} {:<8}".format('Lote' ,'ID','Operacion', 'Resultado'))
     print()
     for proceso in procesosTerminados:
-        proceso.resultado = round(proceso.resultado, 2)
+        if proceso.resultado != "ERROR":
+            proceso.resultado = round(proceso.resultado, 2)
         print("{:<12} {:<15} {:<16} {:<7}".format(proceso.lote ,proceso.id, proceso.operacion, proceso.resultado))
     print("\n")
     print("Número de lotes restantes: ", lotes)
@@ -83,7 +84,7 @@ os.system("cls")
 
 while(procesos > 0):
     indiceProceso += 1
-    tme = random.randint(5, 7)
+    tme = random.randint(5, 16)
     num1 = random.randint(1, 50)
     num2 = random.randint(1, 50)
     operador = random.choice(operaciones)
