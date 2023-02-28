@@ -84,7 +84,7 @@ procesos = int(input("Ingrese el numero de procesos a trabajar: "))
 indiceProceso = 0
 tt = 0
 operaciones = ["+", "-", "*", "/", "%"]
-os.system("clear")
+os.system("cls")
 
 
 while(procesos > 0):
@@ -147,7 +147,7 @@ while(len(listaProcesos) > 0):
             tt += 1
             tiempoTotal += 1
             while pausa:
-                os.system("clear")
+                os.system("cls")
                 mostrar()
                 total = datetime.timedelta(seconds = tiempoTotal)
                 print("Tiempo total transcurrido: ", total, end="\r")
@@ -165,7 +165,7 @@ while(len(listaProcesos) > 0):
                 total_seconds = 0
                 tt = 0
                 error = 0
-            os.system("clear")
+            os.system("cls")
         if(len(enProceso) != 0):    
             procesosTerminados.append(enProceso.pop(0))
         cont -= 1
