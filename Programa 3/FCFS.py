@@ -1,7 +1,7 @@
 import os, time, datetime, math, random
 from pynput import keyboard 
 
-print("Bienvenido a la simulación de procesamiento por lotes")
+print("Bienvenido a la simulación de procesamiento")
 
 
 class Proceso:
@@ -127,7 +127,7 @@ os.system("cls")
 
 while(procesos > 0):
     indiceProceso += 1
-    tme = random.randint(3, 5)
+    tme = random.randint(5, 16)
     num1 = random.randint(1, 50)
     num2 = random.randint(1, 50)
     operador = random.choice(operaciones)
@@ -155,16 +155,18 @@ pausa = False
 flag_1 = 0
 flag_2 = 0
 error = 0
+total = 0
+totalInt = 0
 
 while(cont2 > 0):
     while(len(procesosListos)+len(procesosBloqueados) < 4 and len(procesosNuevos) > 0):
         procesosListos.append(procesosNuevos.pop(0))
-        procesosListos[0].tLlegada = tiempoTotal
+        procesosListos[0].tLlegada = totalInt
     for i in range(len(procesosListos)):
         if(len(procesosListos) > 0):
             enEjecucion.append(procesosListos.pop(0))
             if enEjecucion[0].flagEjecucion == False:
-                enEjecucion[0].tRespuesta = tiempoTotal - enEjecucion[0].tLlegada
+                enEjecucion[0].tRespuesta = totalInt - enEjecucion[0].tLlegada
                 enEjecucion[0].flagEjecucion = True
             total_seconds = enEjecucion[0].TME
             tt = enEjecucion[0].TT
@@ -173,8 +175,6 @@ while(cont2 > 0):
             mostrar()
             if len(enEjecucion) == 0 and len(procesosListos) > 0: #Cuando aún hay procesos en bloqueados y no en ejecución
                 enEjecucion.append(procesosListos.pop(0))
-                total_seconds = enEjecucion[0].TME
-                tt = enEjecucion[0].TT
             total = datetime.timedelta(seconds = tiempoTotal)
             print("Tiempo total transcurrido: ", total, end="\r")
             time.sleep(1)
@@ -183,6 +183,7 @@ while(cont2 > 0):
             enEjecucion[0].TT +=1
             #tt += 1
             tiempoTotal += 1
+            totalInt += 1
             if len(procesosBloqueados) > 0:
                 for proceso in procesosBloqueados:
                     proceso.tBloqueado += 1
@@ -197,6 +198,7 @@ while(cont2 > 0):
                 print("Tiempo total transcurrido: ", total, end="\r")
                 time.sleep(1)
                 tiempoTotal += 1
+                totalInt += 1
             if(flag_1 == 1):
                 if len(enEjecucion) > 0:
                     total_seconds = enEjecucion[0].TME
@@ -212,12 +214,13 @@ while(cont2 > 0):
                 error = 0
             os.system("cls")
         if(len(enEjecucion) != 0 and enEjecucion[0].TME == 0):    
-            enEjecucion[0].tFinalizacion = tiempoTotal
+            enEjecucion[0].tFinalizacion = totalInt
             enEjecucion[0].tRetorno = enEjecucion[0].tFinalizacion - enEjecucion[0].tLlegada
             procesosTerminados.append(enEjecucion.pop(0))
             cont2 -= 1
-            if len(procesosNuevos) != 0:
+            if len(procesosNuevos) > 0:
                 procesosListos.append(procesosNuevos.pop(0))
+                procesosListos[-1].tLlegada = totalInt
 
 mostrar()
 mostrar2()
