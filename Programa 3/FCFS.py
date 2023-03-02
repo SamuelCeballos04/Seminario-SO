@@ -20,9 +20,6 @@ class Proceso:
         self.tBloqueado = tBloqueado
         self.flagEjecucion = False
 
-
-
-
     def __repr__(self):
         return f"Operacion: {self.operacion}, TME: {self.TME}, ID: {self.id}, Resultado: {self.resultado}"
 
@@ -33,8 +30,6 @@ def on_press(key):
             if len(procesosListos) > 0:
                 enEjecucion.append(procesosListos.pop(0))
             if len(enEjecucion) > 0:
-                enEjecucion[0].TT = tt
-                enEjecucion[0].TME = total_seconds
                 procesosBloqueados.append(enEjecucion.pop(0))
             flag_1 = 1
         elif key.char == "e":
@@ -42,14 +37,18 @@ def on_press(key):
             global error
             if len(enEjecucion) > 0:
                 enEjecucion[0].resultado = "ERROR"
-                if len(procesosNuevos) > 0 and len(procesosListos)+len(procesosBloqueados) < 4:
-                    procesosListos.append(procesosNuevos.pop(0))
+                enEjecucion[0].tFinalizacion = totalInt
+                enEjecucion[0].tRetorno = totalInt - enEjecucion[0].tLlegada
+                enEjecucion[0].tServicio = enEjecucion[0].TT
                 if(len(procesosListos) == 0):
                     procesosTerminados.append(enEjecucion.pop(0))
+                    if len(procesosNuevos) > 0:
+                        procesosListos.append(procesosNuevos.pop(0))
                     error = 1
                 else: 
                     procesosTerminados.append(enEjecucion.pop(0))
                     enEjecucion.append(procesosListos.pop(0))
+                    procesosListos.append(procesosNuevos.pop(0))
                     flag_2 = 1
         elif key.char == "p":
             global pausa
@@ -158,20 +157,23 @@ error = 0
 total = 0
 totalInt = 0
 
+while(len(procesosListos)+len(procesosBloqueados) < 4 and len(procesosNuevos) > 0):
+    procesosListos.append(procesosNuevos.pop(0))
+    procesosListos[0].tLlegada = totalInt
+
 while(cont2 > 0):
-    while(len(procesosListos)+len(procesosBloqueados) < 4 and len(procesosNuevos) > 0):
-        procesosListos.append(procesosNuevos.pop(0))
-        procesosListos[0].tLlegada = totalInt
     for i in range(len(procesosListos)):
         if(len(procesosListos) > 0):
             enEjecucion.append(procesosListos.pop(0))
-            if enEjecucion[0].flagEjecucion == False:
-                enEjecucion[0].tRespuesta = totalInt - enEjecucion[0].tLlegada
-                enEjecucion[0].flagEjecucion = True
             total_seconds = enEjecucion[0].TME
             tt = enEjecucion[0].TT
         #while total_seconds > 0 or len(procesosBloqueados) > 0:
-        while enEjecucion[0].TME > 0 or len(procesosBloqueados) > 0:
+        #while enEjecucion[0].TME > 0 or len(procesosBloqueados) > 0:
+        while len(enEjecucion) > 0 or len(procesosBloqueados) > 0:
+            if len(enEjecucion) > 0:
+                if enEjecucion[0].flagEjecucion == False:
+                    enEjecucion[0].tRespuesta = totalInt - enEjecucion[0].tLlegada
+                    enEjecucion[0].flagEjecucion = True
             mostrar()
             if len(enEjecucion) == 0 and len(procesosListos) > 0: #Cuando aún hay procesos en bloqueados y no en ejecución
                 enEjecucion.append(procesosListos.pop(0))
@@ -179,14 +181,18 @@ while(cont2 > 0):
             print("Tiempo total transcurrido: ", total, end="\r")
             time.sleep(1)
             #total_seconds -= 1
-            enEjecucion[0].TME -=1
-            enEjecucion[0].TT +=1
+            if len(enEjecucion) > 0:
+                enEjecucion[0].TME -=1
+                enEjecucion[0].TT +=1
+            for proceso in procesosListos: #Aumenta el tiempo de espera cada segundo
+                proceso.tEspera += 1
             #tt += 1
             tiempoTotal += 1
             totalInt += 1
             if len(procesosBloqueados) > 0:
                 for proceso in procesosBloqueados:
                     proceso.tBloqueado += 1
+                    proceso.tEspera += 1
                     if proceso.tBloqueado == 8:
                         proceso.tBloqueado = 0
                         procesosListos.append(procesosBloqueados.pop(0))
@@ -213,14 +219,16 @@ while(cont2 > 0):
                 tt = 0
                 error = 0
             os.system("cls")
-        if(len(enEjecucion) != 0 and enEjecucion[0].TME == 0):    
-            enEjecucion[0].tFinalizacion = totalInt
-            enEjecucion[0].tRetorno = enEjecucion[0].tFinalizacion - enEjecucion[0].tLlegada
-            procesosTerminados.append(enEjecucion.pop(0))
-            cont2 -= 1
-            if len(procesosNuevos) > 0:
-                procesosListos.append(procesosNuevos.pop(0))
-                procesosListos[-1].tLlegada = totalInt
+            if(len(enEjecucion) != 0 and enEjecucion[0].TME == 0):    
+                enEjecucion[0].tFinalizacion = totalInt
+                enEjecucion[0].tRetorno = enEjecucion[0].tFinalizacion - enEjecucion[0].tLlegada
+                procesosTerminados.append(enEjecucion.pop(0))
+                cont2 -= 1
+                if len(procesosListos) > 0:
+                    enEjecucion.append(procesosListos.pop(0))
+                if len(procesosNuevos) > 0:
+                    procesosListos.append(procesosNuevos.pop(0))
+                    procesosListos[-1].tLlegada = totalInt
 
 mostrar()
 mostrar2()
