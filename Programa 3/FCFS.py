@@ -48,7 +48,8 @@ def on_press(key):
                 else: 
                     procesosTerminados.append(enEjecucion.pop(0))
                     enEjecucion.append(procesosListos.pop(0))
-                    procesosListos.append(procesosNuevos.pop(0))
+                    if len(procesosNuevos) > 0:
+                        procesosListos.append(procesosNuevos.pop(0))
                     flag_2 = 1
         elif key.char == "p":
             global pausa
@@ -121,7 +122,7 @@ procesos = int(input("Ingrese el numero de procesos a trabajar: "))
 indiceProceso = 0
 tt = 0
 operaciones = ["+", "-", "*", "/", "%"]
-os.system("cls")
+os.system("clear")
 
 
 while(procesos > 0):
@@ -198,7 +199,7 @@ while(cont2 > 0):
                         procesosListos.append(procesosBloqueados.pop(0))
 
             while pausa:
-                os.system("cls")
+                os.system("clear")
                 mostrar()
                 total = datetime.timedelta(seconds = tiempoTotal)
                 print("Tiempo total transcurrido: ", total, end="\r")
@@ -211,14 +212,12 @@ while(cont2 > 0):
                     tt = enEjecucion[0].TT
                     flag_1 = 0
             if(flag_2 == 1):
-                total_seconds = enEjecucion[0].TME
-                tt = enEjecucion[0].TT
+                cont2 -= 1
                 flag_2 = 0
             if(error == 1):
-                total_seconds = 0
-                tt = 0
+                cont2 -= 1
                 error = 0
-            os.system("cls")
+            os.system("clear")
             if(len(enEjecucion) != 0 and enEjecucion[0].TME == 0):    
                 enEjecucion[0].tFinalizacion = totalInt
                 enEjecucion[0].tRetorno = enEjecucion[0].tFinalizacion - enEjecucion[0].tLlegada
@@ -229,7 +228,7 @@ while(cont2 > 0):
                 if len(procesosNuevos) > 0:
                     procesosListos.append(procesosNuevos.pop(0))
                     procesosListos[-1].tLlegada = totalInt
-
+        
 mostrar()
 mostrar2()
 print("Tiempo total transcurrido: ", total)
