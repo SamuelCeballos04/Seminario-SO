@@ -44,12 +44,14 @@ def on_press(key):
                     procesosTerminados.append(enEjecucion.pop(0))
                     if len(procesosNuevos) > 0:
                         procesosListos.append(procesosNuevos.pop(0))
+                        procesosListos[-1].tLlegada = totalInt
                     error = 1
                 else: 
                     procesosTerminados.append(enEjecucion.pop(0))
                     enEjecucion.append(procesosListos.pop(0))
                     if len(procesosNuevos) > 0:
                         procesosListos.append(procesosNuevos.pop(0))
+                        procesosListos[-1].tLlegada = totalInt
                     flag_2 = 1
         elif key.char == "p":
             global pausa
@@ -122,7 +124,7 @@ procesos = int(input("Ingrese el numero de procesos a trabajar: "))
 indiceProceso = 0
 tt = 0
 operaciones = ["+", "-", "*", "/", "%"]
-os.system("clear")
+os.system("cls")
 
 
 while(procesos > 0):
@@ -199,13 +201,13 @@ while(cont2 > 0):
                         procesosListos.append(procesosBloqueados.pop(0))
 
             while pausa:
-                os.system("clear")
+                os.system("cls")
                 mostrar()
                 total = datetime.timedelta(seconds = tiempoTotal)
                 print("Tiempo total transcurrido: ", total, end="\r")
                 time.sleep(1)
-                tiempoTotal += 1
-                totalInt += 1
+                #tiempoTotal += 1
+                #totalInt += 1
             if(flag_1 == 1):
                 if len(enEjecucion) > 0:
                     total_seconds = enEjecucion[0].TME
@@ -217,7 +219,7 @@ while(cont2 > 0):
             if(error == 1):
                 cont2 -= 1
                 error = 0
-            os.system("clear")
+            os.system("cls")
             if(len(enEjecucion) != 0 and enEjecucion[0].TME == 0):    
                 enEjecucion[0].tFinalizacion = totalInt
                 enEjecucion[0].tRetorno = enEjecucion[0].tFinalizacion - enEjecucion[0].tLlegada
