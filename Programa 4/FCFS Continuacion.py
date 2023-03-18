@@ -181,9 +181,9 @@ def mostrar2():
     for proceso in procesosTerminados:
         if proceso.resultado != "ERROR":
             proceso.resultado = round(proceso.resultado, 2) 
-            proceso.tServicio = proceso.TT
-        elif proceso.resultado == "ERROR": 
-            proceso.tServicio = proceso.TT
+            #proceso.tServicio = proceso.TT
+        #elif proceso.resultado == "ERROR": 
+            #proceso.tServicio = proceso.TT
         print("{:<7} {:<12} {:<15} {:<10} {:<10} {:<10} {:<10} {:<10} {:<10}".format(proceso.id, proceso.operacion, proceso.resultado, proceso.tLlegada, proceso.tFinalizacion, proceso.tRetorno, proceso.tRespuesta, proceso.tEspera, proceso.tServicio))
     print("\n")
 
