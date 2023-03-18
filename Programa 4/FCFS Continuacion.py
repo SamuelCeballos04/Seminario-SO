@@ -222,10 +222,10 @@ def mostrar3():
     for proceso in procesosTerminados:
         if proceso.resultado != "ERROR":
             proceso.resultado = round(proceso.resultado, 2) 
-            proceso.tServicio = proceso.TT
+            #proceso.tServicio = proceso.TT
             terminacion = "NORMAL"
         elif proceso.resultado == "ERROR": 
-            proceso.tServicio = proceso.TT
+            #proceso.tServicio = proceso.TT
             terminacion = "ERROR" 
         print("{:<8} {:<12} {:<14} {:<10} {:<10} {:<10} {:<10} {:<10} {:<10} {:<12}".format(proceso.id, proceso.operacion, proceso.resultado, proceso.tLlegada, proceso.tFinalizacion, proceso.tRetorno, proceso.tRespuesta, proceso.tEspera, proceso.tServicio, terminacion))
     print("\n")
@@ -245,6 +245,7 @@ while(cont2 > 0):
         #while enEjecucion[0].TME > 0 or len(procesosBloqueados) > 0:
         while len(enEjecucion) > 0 or len(procesosBloqueados) > 0:
             if len(enEjecucion) > 0:
+                enEjecucion[0].tServicio += 1
                 if enEjecucion[0].flagEjecucion == False:
                     enEjecucion[0].tRespuesta = totalInt - enEjecucion[0].tLlegada
                     enEjecucion[0].flagEjecucion = True
