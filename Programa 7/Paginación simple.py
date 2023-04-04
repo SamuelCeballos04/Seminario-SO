@@ -115,33 +115,34 @@ totalInt = 0
 tecla = False
 flagE = 0
 flagI = 0
-'''
+
 while(len(procesosNuevos) > 0):
     if procesosNuevos[0].paginas <= disponibles():
+        print("Disponibles: ", disponibles())
         auxPaginas = procesosNuevos[0].paginas
         auxTamanoProceso = procesosNuevos[0].tamano
         auxCont = 0
-        print("Len lista Frames: ", len(listaFrames))
         while auxCont <= len(listaFrames):
-            print("AuxCont: ", auxCont)
             if listaFrames[auxCont].estado == False:
-                print("if frame.estado == False:")
-                print("AuxPaginas: ", auxPaginas)
-                if auxPaginas < 0:
+                if auxPaginas > 0:
                     listaFrames[auxCont].estado = True
                     auxPaginas -= 1
                     listaFrames[auxCont].proceso = procesosNuevos[0].id
                     if auxTamanoProceso >= 5:
-                        listaFrames[auxCont].tamano = 5
+                        listaFrames[auxCont].tam = 5
                         auxTamanoProceso -= 5
                     else:
-                        listaFrames[auxCont].tamano = auxTamanoProceso
+                        listaFrames[auxCont].tam = auxTamanoProceso
+                        auxTamanoProceso = 0
                 else: 
                     break
             auxCont += 1
         procesosListos.append(procesosNuevos.pop(0))
-        procesosListos[0].tLlegada = totalInt'''
-
+        procesosListos[0].tLlegada = totalInt
+    else:
+        print("No hay espacio")
+        break
+'''
 while(len(procesosNuevos) > 0):
     if procesosNuevos[0].paginas <= disponibles():
         auxPaginas = procesosNuevos[0].paginas
@@ -162,15 +163,11 @@ while(len(procesosNuevos) > 0):
                         auxTamanoProceso = 0
             auxPaginas -= 1
                 
-                    
-
-
-
         procesosListos.append(procesosNuevos.pop(0))
-        procesosListos[0].tLlegada = totalInt
+        procesosListos[0].tLlegada = totalInt'''
 
 for proceso in procesosListos:
-    print("Proceso: ", proceso.id, proceso.operacion, proceso.TME, proceso.tamano, proceso.paginas)
+    print("Proceso listos: ", proceso.id, proceso.operacion, proceso.TME, proceso.tamano, proceso.paginas)
 
 print("Lista Frames: ")
 for pagina in listaFrames: 
