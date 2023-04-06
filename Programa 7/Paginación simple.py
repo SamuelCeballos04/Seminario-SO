@@ -115,6 +115,7 @@ totalInt = 0
 tecla = False
 flagE = 0
 flagI = 0
+tabla = False
 
 while(len(procesosNuevos) > 0):
     if procesosNuevos[0].paginas <= disponibles():
@@ -173,7 +174,7 @@ print("Lista Frames: ")
 for pagina in listaFrames: 
     print("Frame: ", pagina.num, pagina.proceso, pagina.tam, pagina.estado)
 
-'''
+
 def on_press(key):
     if hasattr(key, 'char'):
         if key.char == "i":
@@ -193,28 +194,91 @@ def on_press(key):
                 enEjecucion[0].tRetorno = totalInt - enEjecucion[0].tLlegada
                 enEjecucion[0].tServicio = enEjecucion[0].TT
                 if(len(procesosListos) == 0):
+                    for frame in listaFrames:
+                        if frame.proceso == enEjecucion[0].id:
+                            frame.proceso = 0
+                            frame.tam = 0
+                            frame.estado = False
+                    enEjecucion[0].tFinalizacion = totalInt
+                    enEjecucion[0].tRetorno = enEjecucion[0].tFinalizacion - enEjecucion[0].tLlegada
                     procesosTerminados.append(enEjecucion.pop(0))
-                    #quantum2 = quantum
-                    if len(procesosNuevos) > 0:
-                        procesosListos.append(procesosNuevos.pop(0))
-                        procesosListos[-1].tLlegada = totalInt
                     error = 1
+                    #quantum2 = quantum
+                    while(len(procesosNuevos) > 0):
+                        if procesosNuevos[0].paginas <= disponibles():
+                            print("Disponibles: ", disponibles())
+                            auxPaginas = procesosNuevos[0].paginas
+                            auxTamanoProceso = procesosNuevos[0].tamano
+                            auxCont = 0
+                            while auxCont <= len(listaFrames):
+                                if listaFrames[auxCont].estado == False:
+                                    if auxPaginas > 0:
+                                        listaFrames[auxCont].estado = True
+                                        auxPaginas -= 1
+                                        listaFrames[auxCont].proceso = procesosNuevos[0].id
+                                        if auxTamanoProceso >= 5:
+                                            listaFrames[auxCont].tam = 5
+                                            auxTamanoProceso -= 5
+                                        else:
+                                            listaFrames[auxCont].tam = auxTamanoProceso
+                                            auxTamanoProceso = 0
+                                    else: 
+                                        break
+                                auxCont += 1
+                            procesosListos.append(procesosNuevos.pop(0))
+                            procesosListos[-1].tLlegada = totalInt
+                        else:
+                            print("No hay espacio")
+                            break
                 else: 
+                    for frame in listaFrames:
+                        if frame.proceso == enEjecucion[0].id:
+                            frame.proceso = 0
+                            frame.tam = 0
+                            frame.estado = False
+                    enEjecucion[0].tFinalizacion = totalInt
+                    enEjecucion[0].tRetorno = enEjecucion[0].tFinalizacion - enEjecucion[0].tLlegada
                     procesosTerminados.append(enEjecucion.pop(0))
-                    enEjecucion.append(procesosListos.pop(0))
-                    if len(procesosNuevos) > 0:
-                        procesosListos.append(procesosNuevos.pop(0))
-                        procesosListos[-1].tLlegada = totalInt
                     flag_2 = 1
+                    while(len(procesosNuevos) > 0):
+                        if procesosNuevos[0].paginas <= disponibles():
+                            print("Disponibles: ", disponibles())
+                            auxPaginas = procesosNuevos[0].paginas
+                            auxTamanoProceso = procesosNuevos[0].tamano
+                            auxCont = 0
+                            while auxCont <= len(listaFrames):
+                                if listaFrames[auxCont].estado == False:
+                                    if auxPaginas > 0:
+                                        listaFrames[auxCont].estado = True
+                                        auxPaginas -= 1
+                                        listaFrames[auxCont].proceso = procesosNuevos[0].id
+                                        if auxTamanoProceso >= 5:
+                                            listaFrames[auxCont].tam = 5
+                                            auxTamanoProceso -= 5
+                                        else:
+                                            listaFrames[auxCont].tam = auxTamanoProceso
+                                            auxTamanoProceso = 0
+                                    else: 
+                                        break
+                                auxCont += 1
+                            procesosListos.append(procesosNuevos.pop(0))
+                            procesosListos[-1].tLlegada = totalInt
+                        else:
+                            print("No hay espacio")
+                            break
         elif key.char == "p":
             global pausa
             pausa = True
         elif key.char == "t":
             global tecla
             tecla = True
+        elif key.char == "a":
+            global tabla
+            tabla = True
         elif key.char == "c":
             pausa = False
             tecla = False
+            tabla = False
         elif key.char == "n":
             indiceProceso = indices[-1] + 1
             tme = random.randint(5, 16)
@@ -237,9 +301,32 @@ def on_press(key):
             procesoCap = Proceso(operacion, tme, tt, indiceProceso, res, 0, 0, 0, 0, 0, 0, 0)
             indices.append(indiceProceso)
             procesosNuevos.append(procesoCap)
-            if(len(procesosListos)+len(procesosBloqueados) + len(enEjecucion) < 4 and len(procesosNuevos) > 0):
-                procesosListos.append(procesosNuevos.pop(0))
-                procesosListos[-1].tLlegada = totalInt
+            while(len(procesosNuevos) > 0):
+                if procesosNuevos[0].paginas <= disponibles():
+                    print("Disponibles: ", disponibles())
+                    auxPaginas = procesosNuevos[0].paginas
+                    auxTamanoProceso = procesosNuevos[0].tamano
+                    auxCont = 0
+                    while auxCont <= len(listaFrames):
+                        if listaFrames[auxCont].estado == False:
+                            if auxPaginas > 0:
+                                listaFrames[auxCont].estado = True
+                                auxPaginas -= 1
+                                listaFrames[auxCont].proceso = procesosNuevos[0].id
+                                if auxTamanoProceso >= 5:
+                                    listaFrames[auxCont].tam = 5
+                                    auxTamanoProceso -= 5
+                                else:
+                                    listaFrames[auxCont].tam = auxTamanoProceso
+                                    auxTamanoProceso = 0
+                            else: 
+                                break
+                        auxCont += 1
+                    procesosListos.append(procesosNuevos.pop(0))
+                    procesosListos[-1].tLlegada = totalInt
+                else:
+                    print("No hay espacio")
+                    break
 
 
 l = keyboard.Listener(on_press=on_press)
@@ -341,11 +428,47 @@ def mostrar3():
         print("{:<8} {:<12} {:<14} {:<10} {:<10} {:<10} {:<10} {:<10} {:<10} {:<12}".format(proceso.id, proceso.operacion, proceso.resultado, proceso.tLlegada, proceso.tFinalizacion, proceso.tRetorno, proceso.tRespuesta, proceso.tEspera, proceso.tServicio, terminacion))
     print("\n")
 
+def mostrarTabla():
+    print("------------------------------------------------")
+    print("Memoria actual")
+    print("{:<10} {:<16} {:<16}".format('Frame','Espacio ocupado', 'Proceso asignado'))
+    for frame in listaFrames:
+        if frame.proceso == False:
+            print("{:<10} {:<16} {:<16}".format(frame.num, frame.tam, 'Frame no ocupado'))
+        else: 
+            print("{:<10} {:<16} {:<16}".format(frame.num, str(frame.tam) + '/5', frame.proceso))
+    print("------------------------------------------------")
+    
 
+
+
+os.system("cls")
 while(len(procesosNuevos) > 0):
     if procesosNuevos[0].paginas <= disponibles():
+        print("Disponibles: ", disponibles())
+        auxPaginas = procesosNuevos[0].paginas
+        auxTamanoProceso = procesosNuevos[0].tamano
+        auxCont = 0
+        while auxCont <= len(listaFrames):
+            if listaFrames[auxCont].estado == False:
+                if auxPaginas > 0:
+                    listaFrames[auxCont].estado = True
+                    auxPaginas -= 1
+                    listaFrames[auxCont].proceso = procesosNuevos[0].id
+                    if auxTamanoProceso >= 5:
+                        listaFrames[auxCont].tam = 5
+                        auxTamanoProceso -= 5
+                    else:
+                        listaFrames[auxCont].tam = auxTamanoProceso
+                        auxTamanoProceso = 0
+                else: 
+                    break
+            auxCont += 1
         procesosListos.append(procesosNuevos.pop(0))
-        procesosListos[0].tLlegada = totalInt
+        procesosListos[-1].tLlegada = totalInt
+    else:
+        print("No hay espacio")
+        break
 quantum2 = quantum
 while(cont2 > 0):
     for i in range(len(procesosListos)):
@@ -411,6 +534,12 @@ while(cont2 > 0):
                 total = datetime.timedelta(seconds = tiempoTotal)
                 print("Tiempo total transcurrido: ", total, end="\r")
                 time.sleep(1)
+            while tabla: 
+                os.system("cls")
+                mostrarTabla()
+                total = datetime.timedelta(seconds = tiempoTotal)
+                print("Tiempo total transcurrido: ", total, end="\r")
+                time.sleep(1)
             if(flag_1 == 1):
                 if len(enEjecucion) > 0:
                     total_seconds = enEjecucion[0].TR
@@ -427,17 +556,48 @@ while(cont2 > 0):
             os.system("cls")
             if(len(enEjecucion) != 0 and enEjecucion[0].TR == 0):
                 quantum2 = quantum     
+                for frame in listaFrames:
+                    if frame.proceso == enEjecucion[0].id:
+                        frame.proceso = 0
+                        frame.tam = 0
+                        frame.estado = False
                 enEjecucion[0].tFinalizacion = totalInt
                 enEjecucion[0].tRetorno = enEjecucion[0].tFinalizacion - enEjecucion[0].tLlegada
                 procesosTerminados.append(enEjecucion.pop(0))
                 cont2 -= 1
                 if len(procesosListos) > 0:
                     enEjecucion.append(procesosListos.pop(0))
-                if len(procesosNuevos) > 0:
-                    procesosListos.append(procesosNuevos.pop(0))
-                    procesosListos[-1].tLlegada = totalInt
+                while(len(procesosNuevos) > 0):
+                    if procesosNuevos[0].paginas <= disponibles():
+                        print("Disponibles: ", disponibles())
+                        auxPaginas = procesosNuevos[0].paginas
+                        auxTamanoProceso = procesosNuevos[0].tamano
+                        auxCont = 0
+                        while auxCont <= len(listaFrames):
+                            if listaFrames[auxCont].estado == False:
+                                if auxPaginas > 0:
+                                    listaFrames[auxCont].estado = True
+                                    auxPaginas -= 1
+                                    listaFrames[auxCont].proceso = procesosNuevos[0].id
+                                    if auxTamanoProceso >= 5:
+                                        listaFrames[auxCont].tam = 5
+                                        auxTamanoProceso -= 5
+                                    else:
+                                        listaFrames[auxCont].tam = auxTamanoProceso
+                                        auxTamanoProceso = 0
+                                else: 
+                                    break
+                            auxCont += 1
+                        procesosListos.append(procesosNuevos.pop(0))
+                        procesosListos[-1].tLlegada = totalInt
+                    else:
+                        print("No hay espacio")
+                        break
         
 mostrar()
 mostrar2()
 print("Tiempo total transcurrido: ", total)
-'''
+
+print("Lista Frames: ")
+for pagina in listaFrames: 
+    print("Frame: ", pagina.num, pagina.proceso, pagina.tam, pagina.estado)
