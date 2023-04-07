@@ -1,5 +1,7 @@
 import os, time, datetime, math, random
 from pynput import keyboard 
+import pandas as pd
+from pandas import ExcelWriter
 
 print("Bienvenido a la simulación de procesamiento")
 
@@ -43,17 +45,19 @@ while control < 40:
         frameAux = Frame(control, 0, 0, False)
         listaFrames.append(frameAux)
         control+=1
-'''
+
 print("Lista Frames: ")
 for pagina in listaFrames: 
     print("Frame: ", pagina.num, pagina.proceso, pagina.tam, pagina.estado)
-'''
+
 procesosNuevos = []
 procesosListos = []
 enEjecucion = []
 procesosBloqueados = []
 procesosTerminados = []
 indices = []
+procesosSuspendidos = []
+procesosSuspendidosCopia = []
 
 
 procesos = int(input("Ingrese el numero de procesos a trabajar: "))
@@ -90,10 +94,9 @@ while(procesos > 0):
     indices.append(indiceProceso)
     procesosNuevos.append(procesoCap)
     procesos -= 1
-'''
+
 for proceso in procesosNuevos:
     print("Proceso: ", proceso.id, proceso.operacion, proceso.TME, proceso.tamano, proceso.paginas)
-'''
 
 def disponibles():
     disp = 0
@@ -102,7 +105,7 @@ def disponibles():
             disp += 1
     return disp
 
-#print("Disponibles: ", disponibles())
+print("Disponibles: ", disponibles())
 
 cont = len(procesosNuevos)
 cont2 = cont
@@ -110,6 +113,7 @@ tiempoTotal = 0
 pausa = False
 flag_1 = 0
 flag_2 = 0
+flag_3 = 0
 error = 0
 total = 0
 totalInt = 0
@@ -167,14 +171,14 @@ while(len(procesosNuevos) > 0):
                 
         procesosListos.append(procesosNuevos.pop(0))
         procesosListos[0].tLlegada = totalInt'''
-'''
+
 for proceso in procesosListos:
     print("Proceso listos: ", proceso.id, proceso.operacion, proceso.TME, proceso.tamano, proceso.paginas)
 
 print("Lista Frames: ")
 for pagina in listaFrames: 
     print("Frame: ", pagina.num, pagina.proceso, pagina.tam, pagina.estado)
-'''
+
 
 def on_press(key):
     if hasattr(key, 'char'):
@@ -211,7 +215,7 @@ def on_press(key):
                             auxPaginas = procesosNuevos[0].paginas
                             auxTamanoProceso = procesosNuevos[0].tamano
                             auxCont = 0
-                            while auxCont <= len(listaFrames):
+                            while auxCont < len(listaFrames):
                                 if listaFrames[auxCont].estado == False:
                                     if auxPaginas > 0:
                                         listaFrames[auxCont].estado = True
@@ -280,6 +284,41 @@ def on_press(key):
             pausa = False
             tecla = False
             tabla = False
+        elif key.char == "s":
+            if len(procesosBloqueados) > 0:
+                for frame in listaFrames:
+                    if frame.proceso == procesosBloqueados[0].id:
+                        frame.proceso = 0
+                        frame.tam = 0
+                        frame.estado = False
+                elim = procesosBloqueados.pop(0)
+                procesosSuspendidos.append(elim)
+                procesosSuspendidosCopia.append(elim)
+        elif key.char == "r":
+            if len(procesosSuspendidos) > 0:
+                if procesosSuspendidos[0].paginas <= disponibles():
+                    print("Disponibles: ", disponibles())
+                    auxPaginas = procesosSuspendidos[0].paginas
+                    auxTamanoProceso = procesosSuspendidos[0].tamano
+                    auxCont = 0
+                    while auxCont < len(listaFrames):
+                        if listaFrames[auxCont].estado == False:
+                            if auxPaginas > 0:
+                                listaFrames[auxCont].estado = True
+                                auxPaginas -= 1
+                                listaFrames[auxCont].proceso = procesosSuspendidos[0].id
+                                if auxTamanoProceso >= 5:
+                                    listaFrames[auxCont].tam = 5
+                                    auxTamanoProceso -= 5
+                                else:
+                                    listaFrames[auxCont].tam = auxTamanoProceso
+                                    auxTamanoProceso = 0
+                            else: 
+                                break
+                        auxCont += 1
+                    procesosListos.append(procesosSuspendidos.pop(0))
+                else:
+                    print("No hay espacio")
         elif key.char == "n":
             indiceProceso = indices[-1] + 1
             tme = random.randint(5, 16)
@@ -369,6 +408,7 @@ def mostrar():
         print("{:<15} {:<16} {:<7}".format(proceso.id, proceso.operacion, proceso.resultado))
     print("\n")
     print("Número de procesos nuevos: ", len(procesosNuevos))
+    print("Número de procesos suspendidos: ", len(procesosSuspendidos))
 
 #Impresión al final del programa
 def mostrar2():
@@ -523,6 +563,37 @@ while(cont2 > 0):
                         proceso.tBloqueado = 0
                         procesosListos.append(procesosBloqueados.pop(0))
             
+            if len(procesosSuspendidos) > 0:
+                for proceso in procesosSuspendidos:
+                    proceso.tEspera += 1
+            #Cuando todo esté vacío y aún haya suspendidos, entrará aquí ↓ Falta validar con la maestra
+            if len(procesosListos)+len(procesosNuevos)+len(enEjecucion)+len(procesosBloqueados) == 0 and len(procesosSuspendidos) > 0:
+                while(len(procesosSuspendidos) > 0):
+                    if procesosSuspendidos[0].paginas <= disponibles():
+                        print("Disponibles: ", disponibles())
+                        auxPaginas = procesosSuspendidos[0].paginas
+                        auxTamanoProceso = procesosSuspendidos[0].tamano
+                        auxCont = 0
+                        while auxCont < len(listaFrames):
+                            if listaFrames[auxCont].estado == False:
+                                if auxPaginas > 0:
+                                    listaFrames[auxCont].estado = True
+                                    auxPaginas -= 1
+                                    listaFrames[auxCont].proceso = procesosSuspendidos[0].id
+                                    if auxTamanoProceso >= 5:
+                                        listaFrames[auxCont].tam = 5
+                                        auxTamanoProceso -= 5
+                                    else:
+                                        listaFrames[auxCont].tam = auxTamanoProceso
+                                        auxTamanoProceso = 0
+                                else: 
+                                    break
+                            auxCont += 1
+                        procesosListos.append(procesosSuspendidos.pop(0))
+                    else:
+                        print("No hay espacio")
+                        break
+                        
             while pausa:
                 os.system("cls")
                 mostrar()
@@ -547,6 +618,12 @@ while(cont2 > 0):
                     tt = enEjecucion[0].TT
                     quantum2 = quantum
                     flag_1 = 0
+            if(flag_3 == 1):
+                if len(procesosBloqueados) > 0:
+                    total_seconds = procesosBloqueados[0].TR
+                    tt = procesosBloqueados[0].TT
+                    quantum2 = quantum
+                    flag_3 = 0
             if(flag_2 == 1):
                 quantum2 = quantum
                 cont2 -= 1
@@ -602,3 +679,24 @@ print("Tiempo total transcurrido: ", total)
 print("Lista Frames: ")
 for pagina in listaFrames: 
     print("Frame: ", pagina.num, pagina.proceso, pagina.tam, pagina.estado)
+
+idSuspendidos = []
+opSuspendidos = []
+TMESuspendidos = []
+tamSuspendidos = []
+
+for proceso in procesosSuspendidosCopia:
+    idSuspendidos.append(proceso.id)
+    opSuspendidos.append(proceso.operacion)
+    TMESuspendidos.append(proceso.TME)
+    tamSuspendidos.append(proceso.tamano)
+
+
+df = pd.DataFrame({'Id': idSuspendidos,
+                   'Operacion': opSuspendidos,
+                   'TME': TMESuspendidos,
+                   'Tamanio': tamSuspendidos})
+df = df[['Id', 'Operacion', 'TME', 'Tamanio']]
+writer = ExcelWriter('Programa 8/suspendidos.xlsx')
+df.to_excel(writer, 'Suspendidos', index=False)
+writer.save()
