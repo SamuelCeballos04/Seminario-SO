@@ -18,6 +18,12 @@ lista = ["_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "
 def imprimir(): 
     print(lista)
 
+def header():
+    print('{:^150}'.format('************************\n'))
+    print('{:^150}'.format('* PRODUCTOR-CONSUMIDOR *\n'))
+    print('{:^150}'.format('************************\n'))
+    print()
+
 while band==True:
     if a == 22:
         a = 0
@@ -34,23 +40,27 @@ while band==True:
         indice = a
         aux2 = cant
         while aux<cant:
-            print("Productor: trabajando")
-            print("Consumidor: dormido")
-            print("Cantidad restante a producir: ", aux2)
+            header()
+            print()
+            print('{:^150}'.format('Productor: trabajando\n'))
+            print('{:^150}'.format('Consumidor: dormido\n'))
+            print('{:^150}'.format('Cantidad restante a producir: ' + str(aux2)))
+            print("\n\n")
             if band == False: 
-                os.system("cls")
+                os.system("clear")
                 print("Terminando proceso...")
                 time.sleep(2)
                 break
             if indice == 22:
                 indice = 0
             lista[indice] = "o"
-            print(lista)
+            lista_c = ' '.join(map(str, lista))
+            print('{:^150}'.format(lista_c))
             aux += 1
             indice += 1
             aux2 -= 1
             time.sleep(0.8)
-            os.system("cls")
+            os.system("clear")
         a = indice
         band2 = True
     if num == 1 and lista.count("_") >= cant:
@@ -59,32 +69,38 @@ while band==True:
         aux = 0
         indice = a
         aux2 = cant
-        os.system("cls")
+        os.system("clear")
         while aux<cant:
-            print("Productor: trabajando")
-            print("Consumidor: dormido")
-            print("Cantidad restante a producir: ", aux2)
+            header()
+            print()
+            print('{:^150}'.format('Productor: trabajando\n'))
+            print('{:^150}'.format('Consumidor: dormido\n'))
+            print('{:^150}'.format('Cantidad restante a producir: ' + str(aux2)))
+            print("\n\n")
             if band == False: 
-                os.system("cls")
+                os.system("clear")
                 print("Terminando proceso...")
                 time.sleep(2)
                 break
             if indice == 22:
                 indice = 0
             lista[indice] = "o"
-            print(lista)
+            lista_c = ' '.join(map(str, lista))
+            print('{:^150}'.format(lista_c))
             aux += 1
             indice += 1
             aux2 -= 1
             time.sleep(0.8)
-            os.system("cls")
+            os.system("clear")
         a = indice
     if num == 1 and lista.count("_") < cant:
-        print("Productor: no pudo entrar")
-        print("Consumidor: dormido")
-        print("Repitiendo proceso...")
+        header()
+        print()
+        print('{:^150}'.format("Productor: no pudo entrar\n"))
+        print('{:^150}'.format("Consumidor: dormido\n"))
+        print('{:^150}'.format("Repitiendo proceso..."))
         time.sleep(1.5)
-        os.system("pause")
+        #os.system("pause")
         pass
     if num == 2 and lista.count("o") >= cant:
         #print("Productor: dormido")
@@ -92,32 +108,38 @@ while band==True:
         aux = 0
         indice = e
         aux2 = cant
-        os.system("cls")
+        os.system("clear")
         while aux<cant:
-            print("Productor: dormido")
-            print("Consumidor: trabajando")
-            print("Cantidad restante a consumir: ", aux2)
+            header()
+            print()
+            print('{:^150}'.format("Productor: dormido\n"))
+            print('{:^150}'.format("Consumidor: trabajando\n"))
+            print('{:^150}'.format("Cantidad restante a consumir: " + str(aux2)))
+            print("\n\n")
             if indice == 22:
                 indice = 0
             if band == False: 
-                os.system("cls")
+                os.system("clear")
                 print("Terminando proceso...")
                 time.sleep(2)
                 break
             lista[indice] = "_"
-            print(lista)
+            lista_c = ' '.join(map(str, lista))
+            print('{:^150}'.format(lista_c))
             aux += 1
             indice += 1
             aux2 -= 1
             time.sleep(0.8)
-            os.system("cls")
+            os.system("clear")
         e = indice
     if num == 2 and lista.count("o") < cant:
-        print("Productor: dormido")
-        print("Consumidor: no pudo entrar")
-        print("Repitiendo proceso...")
+        header()
+        print()
+        print('{:^150}'.format("Productor: dormido\n"))
+        print('{:^150}'.format("Consumidor: no pudo entrar\n"))
+        print('{:^150}'.format("Repitiendo proceso..."))
         time.sleep(1.2)
-        os.system("pause")
+        #os.system("pause")
         pass
     time.sleep(0.5)
-    os.system("cls")
+    os.system("clear")
