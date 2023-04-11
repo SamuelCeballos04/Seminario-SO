@@ -47,7 +47,7 @@ while band==True:
             print('{:^150}'.format('Cantidad restante a producir: ' + str(aux2)))
             print("\n\n")
             if band == False: 
-                os.system("clear")
+                os.system("cls")
                 print("Terminando proceso...")
                 time.sleep(2)
                 break
@@ -60,7 +60,7 @@ while band==True:
             indice += 1
             aux2 -= 1
             time.sleep(0.8)
-            os.system("clear")
+            os.system("cls")
         a = indice
         band2 = True
     if num == 1 and lista.count("_") >= cant:
@@ -69,7 +69,7 @@ while band==True:
         aux = 0
         indice = a
         aux2 = cant
-        os.system("clear")
+        os.system("cls")
         while aux<cant:
             header()
             print()
@@ -78,7 +78,7 @@ while band==True:
             print('{:^150}'.format('Cantidad restante a producir: ' + str(aux2)))
             print("\n\n")
             if band == False: 
-                os.system("clear")
+                os.system("cls")
                 print("Terminando proceso...")
                 time.sleep(2)
                 break
@@ -91,7 +91,7 @@ while band==True:
             indice += 1
             aux2 -= 1
             time.sleep(0.8)
-            os.system("clear")
+            os.system("cls")
         a = indice
     if num == 1 and lista.count("_") < cant:
         header()
@@ -100,7 +100,7 @@ while band==True:
         print('{:^150}'.format("Consumidor: dormido\n"))
         print('{:^150}'.format("Repitiendo proceso..."))
         time.sleep(1.5)
-        #os.system("pause")
+        os.system("pause")
         pass
     if num == 2 and lista.count("o") >= cant:
         #print("Productor: dormido")
@@ -108,7 +108,7 @@ while band==True:
         aux = 0
         indice = e
         aux2 = cant
-        os.system("clear")
+        os.system("cls")
         while aux<cant:
             header()
             print()
@@ -119,7 +119,7 @@ while band==True:
             if indice == 22:
                 indice = 0
             if band == False: 
-                os.system("clear")
+                os.system("cls")
                 print("Terminando proceso...")
                 time.sleep(2)
                 break
@@ -130,7 +130,7 @@ while band==True:
             indice += 1
             aux2 -= 1
             time.sleep(0.8)
-            os.system("clear")
+            os.system("cls")
         e = indice
     if num == 2 and lista.count("o") < cant:
         header()
@@ -139,7 +139,7 @@ while band==True:
         print('{:^150}'.format("Consumidor: no pudo entrar\n"))
         print('{:^150}'.format("Repitiendo proceso..."))
         time.sleep(1.2)
-        #os.system("pause")
+        os.system("pause")
         pass
-    time.sleep(0.5)
-    os.system("clear")
+    #time.sleep(0.1)
+    os.system("cls")
