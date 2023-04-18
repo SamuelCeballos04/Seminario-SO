@@ -5,15 +5,18 @@ def on_press(key):
     if key == keyboard.Key.esc:
         global band
         band = False
-        print("Presionaste esc")
+        #print("Presionaste esc")
 
 l = keyboard.Listener(on_press=on_press)
 l.start()
 
 a = 0
 e = 0
+espacios = 0
+linea = ''
 band2 = False
 lista = ["_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_"]
+lista_num = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22",] 
 
 def imprimir(): 
     print(lista)
@@ -47,20 +50,32 @@ while band==True:
             print('{:^150}'.format('Cantidad restante a producir: ' + str(aux2)))
             print("\n\n")
             if band == False: 
-                os.system("cls")
+                os.system("clear")
                 print("Terminando proceso...")
                 time.sleep(2)
                 break
             if indice == 22:
                 indice = 0
             lista[indice] = "o"
-            lista_c = ' '.join(map(str, lista))
-            print('{:^150}'.format(lista_c))
+            lista_n = '  '.join(map(str, lista_num)).center(150)
+            lista_c = lista
+            for j, elem, in enumerate(lista_c):
+                if j < 8:
+                    linea += elem + '  '  
+                else:
+                    linea += elem + '   '
+            linea_cent = linea.center(150)
+            print(linea_cent)
+            print()
+            print(lista_n)
+            linea = ''
             aux += 1
             indice += 1
             aux2 -= 1
             time.sleep(0.8)
-            os.system("cls")
+            os.system("clear")
+        if band == False:
+            break
         a = indice
         band2 = True
     if num == 1 and lista.count("_") >= cant:
@@ -69,7 +84,7 @@ while band==True:
         aux = 0
         indice = a
         aux2 = cant
-        os.system("cls")
+        os.system("clear")
         while aux<cant:
             header()
             print()
@@ -78,20 +93,32 @@ while band==True:
             print('{:^150}'.format('Cantidad restante a producir: ' + str(aux2)))
             print("\n\n")
             if band == False: 
-                os.system("cls")
+                os.system("clear")
                 print("Terminando proceso...")
                 time.sleep(2)
                 break
             if indice == 22:
                 indice = 0
             lista[indice] = "o"
-            lista_c = ' '.join(map(str, lista))
-            print('{:^150}'.format(lista_c))
+            lista_n = '  '.join(map(str, lista_num)).center(150)
+            lista_c = lista
+            for j, elem, in enumerate(lista_c):
+                if j < 8:
+                    linea += elem + '  '  
+                else:
+                    linea += elem + '   '
+            linea_cent = linea.center(150)
+            print(linea_cent)
+            print()
+            print(lista_n)
+            linea = ''
             aux += 1
             indice += 1
             aux2 -= 1
             time.sleep(0.8)
-            os.system("cls")
+            os.system("clear")
+        if band == False:
+            break
         a = indice
     if num == 1 and lista.count("_") < cant:
         header()
@@ -100,7 +127,7 @@ while band==True:
         print('{:^150}'.format("Consumidor: dormido\n"))
         print('{:^150}'.format("Repitiendo proceso..."))
         time.sleep(1.5)
-        os.system("pause")
+        #os.system("pause")
         pass
     if num == 2 and lista.count("o") >= cant:
         #print("Productor: dormido")
@@ -108,7 +135,7 @@ while band==True:
         aux = 0
         indice = e
         aux2 = cant
-        os.system("cls")
+        os.system("clear")
         while aux<cant:
             header()
             print()
@@ -119,18 +146,30 @@ while band==True:
             if indice == 22:
                 indice = 0
             if band == False: 
-                os.system("cls")
+                os.system("clear")
                 print("Terminando proceso...")
                 time.sleep(2)
                 break
             lista[indice] = "_"
-            lista_c = ' '.join(map(str, lista))
-            print('{:^150}'.format(lista_c))
+            lista_n = '  '.join(map(str, lista_num)).center(150)
+            lista_c = lista
+            for j, elem, in enumerate(lista_c):
+                if j < 8:
+                    linea += elem + '  '  
+                else:
+                    linea += elem + '   '
+            linea_cent = linea.center(150)
+            print(linea_cent)
+            print()
+            print(lista_n)
+            linea = ''
             aux += 1
             indice += 1
             aux2 -= 1
             time.sleep(0.8)
-            os.system("cls")
+            os.system("clear")
+        if band == False:
+            break
         e = indice
     if num == 2 and lista.count("o") < cant:
         header()
@@ -139,7 +178,7 @@ while band==True:
         print('{:^150}'.format("Consumidor: no pudo entrar\n"))
         print('{:^150}'.format("Repitiendo proceso..."))
         time.sleep(1.2)
-        os.system("pause")
+        #os.system("pause")
         pass
     #time.sleep(0.1)
-    os.system("cls")
+    os.system("clear")
