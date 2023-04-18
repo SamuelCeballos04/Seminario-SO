@@ -2,6 +2,7 @@ import os, time, datetime, math, random
 from pynput import keyboard 
 import pandas as pd
 from pandas import ExcelWriter
+from os import remove
 
 print("Bienvenido a la simulación de procesamiento")
 
@@ -34,6 +35,7 @@ class Frame:
         self.tam = tamano
         self.estado = estado
 
+
 listaFrames = []
 control = 0
 while control < 40:
@@ -45,10 +47,10 @@ while control < 40:
         frameAux = Frame(control, 0, 0, False)
         listaFrames.append(frameAux)
         control+=1
-
+'''
 print("Lista Frames: ")
 for pagina in listaFrames: 
-    print("Frame: ", pagina.num, pagina.proceso, pagina.tam, pagina.estado)
+    print("Frame: ", pagina.num, pagina.proceso, pagina.tam, pagina.estado)'''
 
 procesosNuevos = []
 procesosListos = []
@@ -105,7 +107,7 @@ def disponibles():
             disp += 1
     return disp
 
-print("Disponibles: ", disponibles())
+#print("Disponibles: ", disponibles())
 
 cont = len(procesosNuevos)
 cont2 = cont
@@ -124,7 +126,7 @@ tabla = False
 
 while(len(procesosNuevos) > 0):
     if procesosNuevos[0].paginas <= disponibles():
-        print("Disponibles: ", disponibles())
+        #print("Disponibles: ", disponibles())
         auxPaginas = procesosNuevos[0].paginas
         auxTamanoProceso = procesosNuevos[0].tamano
         auxCont = 0
@@ -174,11 +176,11 @@ while(len(procesosNuevos) > 0):
 
 for proceso in procesosListos:
     print("Proceso listos: ", proceso.id, proceso.operacion, proceso.TME, proceso.tamano, proceso.paginas)
-
+'''
 print("Lista Frames: ")
 for pagina in listaFrames: 
     print("Frame: ", pagina.num, pagina.proceso, pagina.tam, pagina.estado)
-
+'''
 
 def on_press(key):
     if hasattr(key, 'char'):
@@ -211,7 +213,7 @@ def on_press(key):
                     #quantum2 = quantum
                     while(len(procesosNuevos) > 0):
                         if procesosNuevos[0].paginas <= disponibles():
-                            print("Disponibles: ", disponibles())
+                            #print("Disponibles: ", disponibles())
                             auxPaginas = procesosNuevos[0].paginas
                             auxTamanoProceso = procesosNuevos[0].tamano
                             auxCont = 0
@@ -247,7 +249,7 @@ def on_press(key):
                     flag_2 = 1
                     while(len(procesosNuevos) > 0):
                         if procesosNuevos[0].paginas <= disponibles():
-                            print("Disponibles: ", disponibles())
+                            #print("Disponibles: ", disponibles())
                             auxPaginas = procesosNuevos[0].paginas
                             auxTamanoProceso = procesosNuevos[0].tamano
                             auxCont = 0
@@ -293,11 +295,33 @@ def on_press(key):
                         frame.estado = False
                 elim = procesosBloqueados.pop(0)
                 procesosSuspendidos.append(elim)
+
+                idSuspendidos = []
+                opSuspendidos = []
+                TMESuspendidos = []
+                tamSuspendidos = []
+
+                for proceso in procesosSuspendidos:
+                    idSuspendidos.append(proceso.id)
+                    opSuspendidos.append(proceso.operacion)
+                    TMESuspendidos.append(proceso.TME)
+                    tamSuspendidos.append(proceso.tamano)
+
+                if os.path.exists('Programa 8/suspendidos.xlsx'):
+                    remove("Programa 8/suspendidos.xlsx")
+                df = pd.DataFrame({'Id': idSuspendidos,
+                                'Operacion': opSuspendidos,
+                                'TME': TMESuspendidos,
+                                'Tamanio': tamSuspendidos})
+                df = df[['Id', 'Operacion', 'TME', 'Tamanio']]
+                writer = ExcelWriter('Programa 8/suspendidos.xlsx')
+                df.to_excel(writer, 'Suspendidos', index=False)
+                writer.save()
                 procesosSuspendidosCopia.append(elim)
         elif key.char == "r":
             if len(procesosSuspendidos) > 0:
                 if procesosSuspendidos[0].paginas <= disponibles():
-                    print("Disponibles: ", disponibles())
+                    #print("Disponibles: ", disponibles())
                     auxPaginas = procesosSuspendidos[0].paginas
                     auxTamanoProceso = procesosSuspendidos[0].tamano
                     auxCont = 0
@@ -317,6 +341,28 @@ def on_press(key):
                                 break
                         auxCont += 1
                     procesosListos.append(procesosSuspendidos.pop(0))
+
+                    idSuspendidos = []
+                    opSuspendidos = []
+                    TMESuspendidos = []
+                    tamSuspendidos = []
+
+                    for proceso in procesosSuspendidos:
+                        idSuspendidos.append(proceso.id)
+                        opSuspendidos.append(proceso.operacion)
+                        TMESuspendidos.append(proceso.TME)
+                        tamSuspendidos.append(proceso.tamano)
+
+                    if os.path.exists('Programa 8/suspendidos.xlsx'):
+                        remove("Programa 8/suspendidos.xlsx")
+                    df = pd.DataFrame({'Id': idSuspendidos,
+                                    'Operacion': opSuspendidos,
+                                    'TME': TMESuspendidos,
+                                    'Tamanio': tamSuspendidos})
+                    df = df[['Id', 'Operacion', 'TME', 'Tamanio']]
+                    writer = ExcelWriter('Programa 8/suspendidos.xlsx')
+                    df.to_excel(writer, 'Suspendidos', index=False)
+                    writer.save()
                 else:
                     print("No hay espacio")
         elif key.char == "n":
@@ -343,7 +389,7 @@ def on_press(key):
             procesosNuevos.append(procesoCap)
             while(len(procesosNuevos) > 0):
                 if procesosNuevos[0].paginas <= disponibles():
-                    print("Disponibles: ", disponibles())
+                    #print("Disponibles: ", disponibles())
                     auxPaginas = procesosNuevos[0].paginas
                     auxTamanoProceso = procesosNuevos[0].tamano
                     auxCont = 0
@@ -375,40 +421,41 @@ l.start()
 
 #Impresión en el transcurso del programa
 def mostrar():
-    print("------------------------------------------------")
-    
-    print("Procesos listos: \n")
-    print ("{:<15} {:<15} {:<15} {:<15}".format('ID', 'TME', 'TT', 'TR'))  
-    print()
+    print("-------------------------------------")
+    print("Procesos listos:")
+    print ("{:<6} {:<6} {:<6} {:<6}".format('ID', 'TME', 'TT', 'TR'))  
+    #print()
     for proceso in procesosListos:
-        print("{:<15} {:<15} {:<15} {:<15}".format(proceso.id, proceso.TME, proceso.TT, proceso.TR))
-
-    print("------------------------------------------------")
-    print("Proceso en ejecución: \n")
-    print("{:<8} {:<12} {:<15} {:<8} {:<8}".format('ID', 'Operacion', 'TME', 'TT', 'TR'))
-    print()
+        print("{:<6} {:<6} {:<6} {:<6}".format(proceso.id, proceso.TME, proceso.TT, proceso.TR))
+    print("-------------------------------------")
+    print("Proceso en ejecución:")
+    print("{:<6} {:<12} {:<6} {:<6} {:<6}".format('ID', 'Operacion', 'TME', 'TT', 'TR'))
+    #print()
     for proceso in enEjecucion:
-        print("{:<8} {:<12} {:<15} {:<8} {:<8} ".format(proceso.id, proceso.operacion, proceso.TME, proceso.TT, proceso.TR))
+        print("{:<6} {:<12} {:<6} {:<6} {:<6} ".format(proceso.id, proceso.operacion, proceso.TME, proceso.TT, proceso.TR))
     print("Quantum restante: ", quantum2)
-    print()
-    print("------------------------------------------------")
-    print("Procesos bloqueados: \n")
-    print("{:<12} {:<15}".format('ID', 'Tiempo Bloqueado'))
-    print()
+    #print()
+    print("-------------------------------------")
+    print("Procesos bloqueados:")
+    print("{:<6} {:<15}".format('ID', 'Tiempo Bloqueado'))
+    #print()
     for proceso in procesosBloqueados:
-        print("{:<13} {:<15}".format(proceso.id, proceso.tBloqueado))
-    print()
-    print("------------------------------------------------")
-    print("Procesos Terminados: \n")
-    print("{:<14} {:<15} {:<8}".format('ID','Operacion', 'Resultado'))
-    print()
+        print("{:<6} {:<15}".format(proceso.id, proceso.tBloqueado))
+    #print()
+    print("-------------------------------------")
+    print("Procesos Terminados:")
+    print("{:<6} {:<12} {:<8}".format('ID','Operacion', 'Resultado'))
+    #print()
     for proceso in procesosTerminados:
         if proceso.resultado != "ERROR":
             proceso.resultado = round(proceso.resultado, 2)
-        print("{:<15} {:<16} {:<7}".format(proceso.id, proceso.operacion, proceso.resultado))
-    print("\n")
+        print("{:<6} {:<12} {:<8}".format(proceso.id, proceso.operacion, proceso.resultado))
+    #print("\n")
     print("Número de procesos nuevos: ", len(procesosNuevos))
-    print("Número de procesos suspendidos: ", len(procesosSuspendidos))
+    if len(procesosNuevos) > 0:
+        print("Próximo en entrar a listos:")
+        print("{:<6} {:<6}".format('ID','Tamaño'))
+        print("{:<6} {:<6}".format(procesosNuevos[0].id, procesosNuevos[0].tamano))
 
 #Impresión al final del programa
 def mostrar2():
@@ -471,22 +518,71 @@ def mostrar3():
 
 def mostrarTabla():
     print("------------------------------------------------")
+    contFrames = 0
+    contAux = 0
     print("Memoria actual")
-    print("{:<10} {:<16} {:<16}".format('Frame','Espacio ocupado', 'Proceso asignado'))
-    for frame in listaFrames:
-        if frame.proceso == False:
-            print("{:<10} {:<16} {:<16}".format(frame.num, frame.tam, 'Frame no ocupado'))
-        else: 
-            print("{:<10} {:<16} {:<16}".format(frame.num, str(frame.tam) + '/5', frame.proceso))
-    print("------------------------------------------------")
-    
+    print("{:<7} {:<9} {:<16} {:<7} {:<9} {:<16} {:<7} {:<9} {:<16} {:<7} {:<9} {:<16}".format('Frame','Espacio', 'Proceso', 'Frame', 'Espacio', 'Proceso', 'Frame', 'Espacio', 'Proceso', 'Frame', 'Espacio', 'Proceso'))
+    while contFrames < len(listaFrames):
+        if contAux == 3:
+            contAux = -1
+            #Caso Falso Falso Falso Falso
+            if listaFrames[contFrames-3].estado == False and listaFrames[contFrames-2].estado == False and listaFrames[contFrames-1].estado == False and listaFrames[contFrames].estado == False:
+                print("{:<7} {:<9} {:<16} {:<7} {:<9} {:<16} {:<7} {:<9} {:<16} {:<7} {:<9} {:<16}".format(listaFrames[contFrames-3].num, str(listaFrames[contFrames-3].tam) + '/5', 'Libre', listaFrames[contFrames-2].num, str(listaFrames[contFrames-2].tam) + '/5', 'Libre', listaFrames[contFrames-1].num, str(listaFrames[contFrames-1].tam) + '/5', 'Libre', listaFrames[contFrames].num, str(listaFrames[contFrames].tam) + '/5', 'Libre'))
+            #Caso Falso Falso Falso Verdadero
+            elif listaFrames[contFrames-3].estado == False and listaFrames[contFrames-2].estado == False and listaFrames[contFrames-1].estado == False and listaFrames[contFrames].estado == True:
+                print("{:<7} {:<9} {:<16} {:<7} {:<9} {:<16} {:<7} {:<9} {:<16} {:<7} {:<9} {:<16}".format(listaFrames[contFrames-3].num, str(listaFrames[contFrames-3].tam) + '/5', 'Libre', listaFrames[contFrames-2].num, str(listaFrames[contFrames-2].tam) + '/5', 'Libre', listaFrames[contFrames-1].num, str(listaFrames[contFrames-1].tam) + '/5', 'Libre', listaFrames[contFrames].num, str(listaFrames[contFrames].tam) + '/5', listaFrames[contFrames].proceso))
+            #Caso Falso Falso Verdadero Falso
+            elif listaFrames[contFrames-3].estado == False and listaFrames[contFrames-2].estado == False and listaFrames[contFrames-1].estado == True and listaFrames[contFrames].estado == False:
+                print("{:<7} {:<9} {:<16} {:<7} {:<9} {:<16} {:<7} {:<9} {:<16} {:<7} {:<9} {:<16}".format(listaFrames[contFrames-3].num, str(listaFrames[contFrames-3].tam) + '/5', 'Libre', listaFrames[contFrames-2].num, str(listaFrames[contFrames-2].tam) + '/5', 'Libre', listaFrames[contFrames-1].num, str(listaFrames[contFrames-1].tam) + '/5', listaFrames[contFrames-1].proceso, listaFrames[contFrames].num, str(listaFrames[contFrames].tam) + '/5', 'Libre'))
+            #Caso Falso Falso Verdadero Verdadero
+            elif listaFrames[contFrames-3].estado == False and listaFrames[contFrames-2].estado == False and listaFrames[contFrames-1].estado == True and listaFrames[contFrames].estado == True:
+                print("{:<7} {:<9} {:<16} {:<7} {:<9} {:<16} {:<7} {:<9} {:<16} {:<7} {:<9} {:<16}".format(listaFrames[contFrames-3].num, str(listaFrames[contFrames-3].tam) + '/5', 'Libre', listaFrames[contFrames-2].num, str(listaFrames[contFrames-2].tam) + '/5', 'Libre', listaFrames[contFrames-1].num, str(listaFrames[contFrames-1].tam) + '/5', listaFrames[contFrames-1].proceso, listaFrames[contFrames].num, str(listaFrames[contFrames].tam) + '/5', listaFrames[contFrames].proceso))
+            #Caso Falso Verdadero Falso Falso
+            elif listaFrames[contFrames-3].estado == False and listaFrames[contFrames-2].estado == True and listaFrames[contFrames-1].estado == False and listaFrames[contFrames].estado == False:
+                print("{:<7} {:<9} {:<16} {:<7} {:<9} {:<16} {:<7} {:<9} {:<16} {:<7} {:<9} {:<16}".format(listaFrames[contFrames-3].num, str(listaFrames[contFrames-3].tam) + '/5', 'Libre', listaFrames[contFrames-2].num, str(listaFrames[contFrames-2].tam) + '/5', listaFrames[contFrames-2].proceso, listaFrames[contFrames-1].num, str(listaFrames[contFrames-1].tam) + '/5', 'Libre', listaFrames[contFrames].num, str(listaFrames[contFrames].tam) + '/5', 'Libre'))
+            #Caso Falso Verdadero Falso Verdadero
+            elif listaFrames[contFrames-3].estado == False and listaFrames[contFrames-2].estado == True and listaFrames[contFrames-1].estado == False and listaFrames[contFrames].estado == True:
+                print("{:<7} {:<9} {:<16} {:<7} {:<9} {:<16} {:<7} {:<9} {:<16} {:<7} {:<9} {:<16}".format(listaFrames[contFrames-3].num, str(listaFrames[contFrames-3].tam) + '/5', 'Libre', listaFrames[contFrames-2].num, str(listaFrames[contFrames-2].tam) + '/5', listaFrames[contFrames-2].proceso, listaFrames[contFrames-1].num, str(listaFrames[contFrames-1].tam) + '/5', 'Libre', listaFrames[contFrames].num, str(listaFrames[contFrames].tam) + '/5', listaFrames[contFrames].proceso))
+            #Caso Falso Verdadero Verdadero Falso
+            elif listaFrames[contFrames-3].estado == False and listaFrames[contFrames-2].estado == True and listaFrames[contFrames-1].estado == True and listaFrames[contFrames].estado == False:
+                print("{:<7} {:<9} {:<16} {:<7} {:<9} {:<16} {:<7} {:<9} {:<16} {:<7} {:<9} {:<16}".format(listaFrames[contFrames-3].num, str(listaFrames[contFrames-3].tam) + '/5', 'Libre', listaFrames[contFrames-2].num, str(listaFrames[contFrames-2].tam) + '/5', listaFrames[contFrames-2].proceso, listaFrames[contFrames-1].num, str(listaFrames[contFrames-1].tam) + '/5', listaFrames[contFrames-1].proceso, listaFrames[contFrames].num, str(listaFrames[contFrames].tam) + '/5', 'Libre'))
+            #Caso Falso Verdadero Verdadero Verdadero
+            elif listaFrames[contFrames-3].estado == False and listaFrames[contFrames-2].estado == True and listaFrames[contFrames-1].estado == True and listaFrames[contFrames].estado == True:
+                print("{:<7} {:<9} {:<16} {:<7} {:<9} {:<16} {:<7} {:<9} {:<16} {:<7} {:<9} {:<16}".format(listaFrames[contFrames-3].num, str(listaFrames[contFrames-3].tam) + '/5', 'Libre', listaFrames[contFrames-2].num, str(listaFrames[contFrames-2].tam) + '/5', listaFrames[contFrames-2].proceso, listaFrames[contFrames-1].num, str(listaFrames[contFrames-1].tam) + '/5', listaFrames[contFrames-1].proceso, listaFrames[contFrames].num, str(listaFrames[contFrames].tam) + '/5', listaFrames[contFrames].proceso))
+            #Caso Verdadero Falso Falso Falso
+            elif listaFrames[contFrames-3].estado == True and listaFrames[contFrames-2].estado == False and listaFrames[contFrames-1].estado == False and listaFrames[contFrames].estado == False:
+                print("{:<7} {:<9} {:<16} {:<7} {:<9} {:<16} {:<7} {:<9} {:<16} {:<7} {:<9} {:<16}".format(listaFrames[contFrames-3].num, str(listaFrames[contFrames-3].tam) + '/5', listaFrames[contFrames-3].proceso, listaFrames[contFrames-2].num, str(listaFrames[contFrames-2].tam) + '/5', 'Libre', listaFrames[contFrames-1].num, str(listaFrames[contFrames-1].tam) + '/5', 'Libre', listaFrames[contFrames].num, str(listaFrames[contFrames].tam) + '/5', 'Libre'))
+            #Caso Verdadero Falso Falso Verdadero
+            elif listaFrames[contFrames-3].estado == True and listaFrames[contFrames-2].estado == False and listaFrames[contFrames-1].estado == False and listaFrames[contFrames].estado == True:
+                print("{:<7} {:<9} {:<16} {:<7} {:<9} {:<16} {:<7} {:<9} {:<16} {:<7} {:<9} {:<16}".format(listaFrames[contFrames-3].num, str(listaFrames[contFrames-3].tam) + '/5', listaFrames[contFrames-3].proceso, listaFrames[contFrames-2].num, str(listaFrames[contFrames-2].tam) + '/5', 'Libre', listaFrames[contFrames-1].num, str(listaFrames[contFrames-1].tam) + '/5', 'Libre', listaFrames[contFrames].num, str(listaFrames[contFrames].tam) + '/5', listaFrames[contFrames].proceso))
+            #Caso Verdadero Falso Verdadero Falso
+            elif listaFrames[contFrames-3].estado == True and listaFrames[contFrames-2].estado == False and listaFrames[contFrames-1].estado == True and listaFrames[contFrames].estado == False:
+                print("{:<7} {:<9} {:<16} {:<7} {:<9} {:<16} {:<7} {:<9} {:<16} {:<7} {:<9} {:<16}".format(listaFrames[contFrames-3].num, str(listaFrames[contFrames-3].tam) + '/5', listaFrames[contFrames-3].proceso, listaFrames[contFrames-2].num, str(listaFrames[contFrames-2].tam) + '/5', 'Libre', listaFrames[contFrames-1].num, str(listaFrames[contFrames-1].tam) + '/5', listaFrames[contFrames-1].proceso, listaFrames[contFrames].num, str(listaFrames[contFrames].tam) + '/5', 'Libre'))
+            #Caso Verdadero Falso Verdadero Verdadero
+            elif listaFrames[contFrames-3].estado == True and listaFrames[contFrames-2].estado == False and listaFrames[contFrames-1].estado == True and listaFrames[contFrames].estado == True:
+                print("{:<7} {:<9} {:<16} {:<7} {:<9} {:<16} {:<7} {:<9} {:<16} {:<7} {:<9} {:<16}".format(listaFrames[contFrames-3].num, str(listaFrames[contFrames-3].tam) + '/5', listaFrames[contFrames-3].proceso, listaFrames[contFrames-2].num, str(listaFrames[contFrames-2].tam) + '/5', 'Libre', listaFrames[contFrames-1].num, str(listaFrames[contFrames-1].tam) + '/5', listaFrames[contFrames-1].proceso, listaFrames[contFrames].num, str(listaFrames[contFrames].tam) + '/5', listaFrames[contFrames].proceso))
+            #Caso Verdadero Verdadero Falso Falso
+            elif listaFrames[contFrames-3].estado == True and listaFrames[contFrames-2].estado == True and listaFrames[contFrames-1].estado == False and listaFrames[contFrames].estado == False:
+                print("{:<7} {:<9} {:<16} {:<7} {:<9} {:<16} {:<7} {:<9} {:<16} {:<7} {:<9} {:<16}".format(listaFrames[contFrames-3].num, str(listaFrames[contFrames-3].tam) + '/5', listaFrames[contFrames-3].proceso, listaFrames[contFrames-2].num, str(listaFrames[contFrames-2].tam) + '/5', listaFrames[contFrames-2].proceso, listaFrames[contFrames-1].num, str(listaFrames[contFrames-1].tam) + '/5', 'Libre', listaFrames[contFrames].num, str(listaFrames[contFrames].tam) + '/5', 'Libre'))
+            #Caso Verdadero Verdadero Falso Verdadero
+            elif listaFrames[contFrames-3].estado == True and listaFrames[contFrames-2].estado == True and listaFrames[contFrames-1].estado == False and listaFrames[contFrames].estado == True:
+                print("{:<7} {:<9} {:<16} {:<7} {:<9} {:<16} {:<7} {:<9} {:<16} {:<7} {:<9} {:<16}".format(listaFrames[contFrames-3].num, str(listaFrames[contFrames-3].tam) + '/5', listaFrames[contFrames-3].proceso, listaFrames[contFrames-2].num, str(listaFrames[contFrames-2].tam) + '/5', listaFrames[contFrames-2].proceso, listaFrames[contFrames-1].num, str(listaFrames[contFrames-1].tam) + '/5', 'Libre', listaFrames[contFrames].num, str(listaFrames[contFrames].tam) + '/5', listaFrames[contFrames].proceso))
+            #Caso Verdadero Verdadero Verdadero Falso
+            elif listaFrames[contFrames-3].estado == True and listaFrames[contFrames-2].estado == True and listaFrames[contFrames-1].estado == True and listaFrames[contFrames].estado == False:
+                print("{:<7} {:<9} {:<16} {:<7} {:<9} {:<16} {:<7} {:<9} {:<16} {:<7} {:<9} {:<16}".format(listaFrames[contFrames-3].num, str(listaFrames[contFrames-3].tam) + '/5', listaFrames[contFrames-3].proceso, listaFrames[contFrames-2].num, str(listaFrames[contFrames-2].tam) + '/5', listaFrames[contFrames-2].proceso, listaFrames[contFrames-1].num, str(listaFrames[contFrames-1].tam) + '/5', listaFrames[contFrames-1].proceso, listaFrames[contFrames].num, str(listaFrames[contFrames].tam) + '/5', 'Libre'))
+            #Caso Verdadero Verdadero Verdadero Verdadero
+            elif listaFrames[contFrames-3].estado == True and listaFrames[contFrames-2].estado == True and listaFrames[contFrames-1].estado == True and listaFrames[contFrames].estado == True:
+                print("{:<7} {:<9} {:<16} {:<7} {:<9} {:<16} {:<7} {:<9} {:<16} {:<7} {:<9} {:<16}".format(listaFrames[contFrames-3].num, str(listaFrames[contFrames-3].tam) + '/5', listaFrames[contFrames-3].proceso, listaFrames[contFrames-2].num, str(listaFrames[contFrames-2].tam) + '/5', listaFrames[contFrames-2].proceso, listaFrames[contFrames-1].num, str(listaFrames[contFrames-1].tam) + '/5', listaFrames[contFrames-1].proceso, listaFrames[contFrames].num, str(listaFrames[contFrames].tam) + '/5', listaFrames[contFrames].proceso))
+        contFrames+=1
+        contAux+=1
+    print("------------------------------------------------")   
 
 
 
 os.system("cls")
 while(len(procesosNuevos) > 0):
     if procesosNuevos[0].paginas <= disponibles():
-        print("Disponibles: ", disponibles())
+        #print("Disponibles: ", disponibles())
         auxPaginas = procesosNuevos[0].paginas
         auxTamanoProceso = procesosNuevos[0].tamano
         auxCont = 0
@@ -513,7 +609,7 @@ while(len(procesosNuevos) > 0):
 quantum2 = quantum
 while(cont2 > 0):
     for i in range(len(procesosListos)):
-        if(len(procesosListos) > 0):
+        if(len(procesosListos) > 0):  
             enEjecucion.append(procesosListos.pop(0))
             total_seconds = enEjecucion[0].TR
             tt = enEjecucion[0].TT
@@ -526,6 +622,7 @@ while(cont2 > 0):
                     enEjecucion[0].tRespuesta = totalInt - enEjecucion[0].tLlegada
                     enEjecucion[0].flagEjecucion = True
             mostrar()
+            mostrarTabla()
             if len(enEjecucion) == 0 and len(procesosListos) > 0: #Cuando aún hay procesos en bloqueados y no en ejecución
                 enEjecucion.append(procesosListos.pop(0))
             total = datetime.timedelta(seconds = tiempoTotal)
@@ -567,6 +664,7 @@ while(cont2 > 0):
                 for proceso in procesosSuspendidos:
                     proceso.tEspera += 1
             #Cuando todo esté vacío y aún haya suspendidos, entrará aquí ↓ Falta validar con la maestra
+            '''
             if len(procesosListos)+len(procesosNuevos)+len(enEjecucion)+len(procesosBloqueados) == 0 and len(procesosSuspendidos) > 0:
                 while(len(procesosSuspendidos) > 0):
                     if procesosSuspendidos[0].paginas <= disponibles():
@@ -593,10 +691,12 @@ while(cont2 > 0):
                     else:
                         print("No hay espacio")
                         break
-                        
+                        '''
+            
             while pausa:
                 os.system("cls")
                 mostrar()
+                mostrarTabla()
                 total = datetime.timedelta(seconds = tiempoTotal)
                 print("Tiempo total transcurrido: ", total, end="\r")
                 time.sleep(1)
@@ -632,6 +732,9 @@ while(cont2 > 0):
                 cont2 -= 1
                 error = 0
             os.system("cls")
+            if len(procesosSuspendidos) == 0:
+                if os.path.exists('Programa 8/suspendidos.xlsx'):
+                    remove("Programa 8/suspendidos.xlsx")
             if(len(enEjecucion) != 0 and enEjecucion[0].TR == 0):
                 quantum2 = quantum     
                 for frame in listaFrames:
@@ -647,7 +750,7 @@ while(cont2 > 0):
                     enEjecucion.append(procesosListos.pop(0))
                 while(len(procesosNuevos) > 0):
                     if procesosNuevos[0].paginas <= disponibles():
-                        print("Disponibles: ", disponibles())
+                        #print("Disponibles: ", disponibles())
                         auxPaginas = procesosNuevos[0].paginas
                         auxTamanoProceso = procesosNuevos[0].tamano
                         auxCont = 0
@@ -675,28 +778,11 @@ while(cont2 > 0):
 mostrar()
 mostrar2()
 print("Tiempo total transcurrido: ", total)
-
+mostrarTabla()
+'''
 print("Lista Frames: ")
 for pagina in listaFrames: 
     print("Frame: ", pagina.num, pagina.proceso, pagina.tam, pagina.estado)
-
-idSuspendidos = []
-opSuspendidos = []
-TMESuspendidos = []
-tamSuspendidos = []
-
-for proceso in procesosSuspendidosCopia:
-    idSuspendidos.append(proceso.id)
-    opSuspendidos.append(proceso.operacion)
-    TMESuspendidos.append(proceso.TME)
-    tamSuspendidos.append(proceso.tamano)
+'''
 
 
-df = pd.DataFrame({'Id': idSuspendidos,
-                   'Operacion': opSuspendidos,
-                   'TME': TMESuspendidos,
-                   'Tamanio': tamSuspendidos})
-df = df[['Id', 'Operacion', 'TME', 'Tamanio']]
-writer = ExcelWriter('Programa 8/suspendidos.xlsx')
-df.to_excel(writer, 'Suspendidos', index=False)
-writer.save()

@@ -73,9 +73,7 @@ while band==True:
             indice += 1
             aux2 -= 1
             time.sleep(0.8)
-            os.system("clear")
-        if band == False:
-            break
+            os.system("cls")
         a = indice
         band2 = True
     if num == 1 and lista.count("_") >= cant:
@@ -116,9 +114,7 @@ while band==True:
             indice += 1
             aux2 -= 1
             time.sleep(0.8)
-            os.system("clear")
-        if band == False:
-            break
+            os.system("cls")
         a = indice
     if num == 1 and lista.count("_") < cant:
         header()
@@ -167,9 +163,7 @@ while band==True:
             indice += 1
             aux2 -= 1
             time.sleep(0.8)
-            os.system("clear")
-        if band == False:
-            break
+            os.system("cls")
         e = indice
     if num == 2 and lista.count("o") < cant:
         header()
