@@ -244,7 +244,7 @@ def mostrar3():
 
 while(len(procesosListos)+len(procesosBloqueados) < 4 and len(procesosNuevos) > 0):
     procesosListos.append(procesosNuevos.pop(0))
-    procesosListos[0].tLlegada = totalInt
+    procesosListos[-1].tLlegada = totalInt
 quantum2 = quantum
 while(cont2 > 0):
     for i in range(len(procesosListos)):

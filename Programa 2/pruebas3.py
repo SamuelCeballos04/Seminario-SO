@@ -10,6 +10,7 @@ class Proceso:
         self.TME = TME
         self.TT = TT
         self.id = id
+        self.TR = TME
         self.resultado = resultado
         self.lote = lote
 
@@ -21,7 +22,7 @@ def on_press(key):
         if key.char == "i":
             global flag_1
             enProceso[0].TT = tt
-            enProceso[0].TME = total_seconds
+            enProceso[0].TR = total_seconds
             procesosPendientes.append(enProceso.pop(0))
             enProceso.append(procesosPendientes.pop(0))
             flag_1 = 1
@@ -46,17 +47,17 @@ def mostrar():
     print("------------------------------------------------")
     
     print("Procesos en lote actual: \n")
-    print ("{:<15} {:<15} {:<15}".format('ID', 'TME', 'TT'))  
+    print ("{:<15} {:<15} {:<15} {:<15}".format('ID', 'TME', 'TR', 'TT'))  
     print()
     for proceso in procesosPendientes:
-        print("{:<16} {:<15} {:<16}".format(proceso.id, proceso.TME, proceso.TT))
+        print("{:<16} {:<15} {:<16} {:<15}".format(proceso.id, proceso.TME, proceso.TR, proceso.TT))
 
     print("------------------------------------------------")
     print("Proceso realizandose: \n")
-    print("{:<12} {:<15} {:<8} {:<8}".format('Operacion', 'TME', 'TT', 'ID'))
+    print("{:<12} {:<15} {:<15} {:<8} {:<8}".format('Operacion', 'TME', 'TR', 'TT', 'ID'))
     print()
     for proceso in enProceso:
-        print("{:<13} {:<15} {:<7} {:<7}".format(proceso.operacion, total_seconds, tt, proceso.id))
+        print("{:<13} {:<15} {:<15} {:<7} {:<7}".format(proceso.operacion, proceso.TME, total_seconds, tt, proceso.id))
     print()
     print("------------------------------------------------")
     print("Procesos Terminados: \n")
@@ -154,11 +155,11 @@ while(len(listaProcesos) > 0):
                 time.sleep(1)
                 #tiempoTotal += 1
             if(flag_1 == 1):
-                total_seconds = enProceso[0].TME
+                total_seconds = enProceso[0].TR
                 tt = enProceso[0].TT
                 flag_1 = 0
             if(flag_2 == 1):
-                total_seconds = enProceso[0].TME
+                total_seconds = enProceso[0].TR
                 tt = enProceso[0].TT
                 flag_2 = 0
             if(error == 1):
