@@ -1,7 +1,5 @@
-import random
+import os
+from os import remove
 
-i=0
-while i<10:
-    num = random.randint(1, 2)
-    print("Num: ", num)
-    i+=1
+if os.path.exists('Programa 8/suspendidos.xlsx'):
+    remove('Programa 8/suspendidos.xlsx')

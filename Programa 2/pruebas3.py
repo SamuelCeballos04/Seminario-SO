@@ -152,7 +152,7 @@ while(len(listaProcesos) > 0):
                 total = datetime.timedelta(seconds = tiempoTotal)
                 print("Tiempo total transcurrido: ", total, end="\r")
                 time.sleep(1)
-                tiempoTotal += 1
+                #tiempoTotal += 1
             if(flag_1 == 1):
                 total_seconds = enProceso[0].TME
                 tt = enProceso[0].TT
