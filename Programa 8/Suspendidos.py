@@ -387,6 +387,8 @@ def on_press(key):
             procesoCap = Proceso(operacion, tme, tt, indiceProceso, res, 0, 0, 0, 0, 0, 0, 0)
             indices.append(indiceProceso)
             procesosNuevos.append(procesoCap)
+            global cont2
+            cont2 += 1
             while(len(procesosNuevos) > 0):
                 if procesosNuevos[0].paginas <= disponibles():
                     #print("Disponibles: ", disponibles())
@@ -456,6 +458,8 @@ def mostrar():
         print("Próximo en entrar a listos:")
         print("{:<6} {:<6}".format('ID','Tamaño'))
         print("{:<6} {:<6}".format(procesosNuevos[0].id, procesosNuevos[0].tamano))
+    print("Cont2: ", cont2)
+
 
 #Impresión al final del programa
 def mostrar2():
@@ -608,6 +612,18 @@ while(len(procesosNuevos) > 0):
         break
 quantum2 = quantum
 while(cont2 > 0):
+    while disponibles() == 38:
+        os.system("cls")
+        mostrar()
+        mostrarTabla()
+        total = datetime.timedelta(seconds = tiempoTotal)
+        print("Tiempo total transcurrido: ", total, end="\r")
+        tiempoTotal += 1
+        totalInt += 1
+        if len(procesosSuspendidos) > 0:
+                for proceso in procesosSuspendidos:
+                    proceso.tEspera += 1
+        time.sleep(1)
     for i in range(len(procesosListos)):
         if(len(procesosListos) > 0):  
             enEjecucion.append(procesosListos.pop(0))
