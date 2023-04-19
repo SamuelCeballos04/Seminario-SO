@@ -659,6 +659,11 @@ while(cont2 > 0):
                 quantum2 = quantum
             if quantum2 == 0:
                 if(len(enEjecucion) != 0 and enEjecucion[0].TR == 0):
+                    for frame in listaFrames:
+                        if frame.proceso == enEjecucion[0].id:
+                            frame.proceso = 0
+                            frame.tam = 0
+                            frame.estado = False
                     quantum2 = quantum     
                     enEjecucion[0].tFinalizacion = totalInt
                     enEjecucion[0].tRetorno = enEjecucion[0].tFinalizacion - enEjecucion[0].tLlegada
@@ -752,7 +757,7 @@ while(cont2 > 0):
                 if os.path.exists('Programa 8/suspendidos.xlsx'):
                     remove("Programa 8/suspendidos.xlsx")
             if(len(enEjecucion) != 0 and enEjecucion[0].TR == 0):
-                quantum2 = quantum     
+                quantum2 = quantum
                 for frame in listaFrames:
                     if frame.proceso == enEjecucion[0].id:
                         frame.proceso = 0
